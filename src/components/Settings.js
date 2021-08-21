@@ -4,23 +4,26 @@ export default function Settings(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // props.getPokemon(index);
-        // console.log(e);
         props.updateHunt();
     };
 
     const handleChange = (index) => (e) => {
-        // console.log(e.target);
         props.getPokemon(e.target.value, index);
         console.log("calling getPokemon:", e.target.value, index);
         props.setTarget(e.target.value.toLowerCase());
     };
 
+    const handleDelete = index => (e) => {
+        let newHunts = [...props.hunts];
+        newHunts.splice(index, 1);
+        props.setHunts(newHunts);
+        document.getElementById("settings-form").reset();
+    };
+
     return (
         <div>
-            {/* <h3>Settings</h3> */}
             <img className="target-sprite" src={props.targetImg} alt="Pokemon Sprite"/>
-            <form onSubmit={handleSubmit}>
+            <form id="settings-form" onSubmit={handleSubmit}>
                 <div className="target-input">
                     <label>Target: </label>
                     <input
@@ -29,7 +32,7 @@ export default function Settings(props) {
                         placeholder="Enter Pok&eacute;mon"
                     />
                 </div>
-            </form> {/* form won't submit if i include all inputs */}
+            
                 <div className="count-input">
                     <input
                         type="text"
@@ -79,9 +82,10 @@ export default function Settings(props) {
                         value="shiny-charm"
                     />
                 </div>
-                <div className="delete-hunt">
-                    <label>X (delete)</label>
-                </div>
+            </form> {/* form won't submit if i include all inputs */}
+                <button className="delete-hunt" onClick={handleDelete(props.index)}>
+                    Delete
+                </button>
                 <div className="active-button">
                     <button className="active">
                         Active
