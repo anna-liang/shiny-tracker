@@ -1,13 +1,8 @@
 import React from 'react';
-import Settings from './Settings';
 
 export default function Counter(props) {
     return (
         <div>
-            <Settings
-                getPokemon={props.getPokemon}
-                setTarget={props.setTarget}
-            />
             <img className="target-sprite" src={props.targetImg} alt="Pokemon Sprite"/>
             <div className="count">
                 {props.counter}
