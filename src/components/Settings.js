@@ -4,22 +4,28 @@ export default function Settings(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.getPokemon();
+        // props.getPokemon(index);
+        // console.log(e);
+        props.updateHunt();
     }
 
-    const handleChange = (e) => {
+    const handleChange = (index) => (e) => {
+        // console.log(e.target);
+        props.getPokemon(e.target.value, index);
+        console.log("calling getPokemon:", e.target.value, index);
         props.setTarget(e.target.value.toLowerCase());
     }
 
     return (
         <div>
             <h3>Settings</h3>
+            <img className="target-sprite" src={props.targetImg} alt="Pokemon Sprite"/>
             <form onSubmit={handleSubmit}>
                 <div className="target-input">
                     <label>Target: </label>
                     <input
                         type="text"
-                        onChange={handleChange}
+                        onChange={handleChange(props.index)}
                         placeholder="Enter Pok&eacute;mon"
                     />
                 </div>
@@ -54,7 +60,7 @@ export default function Settings(props) {
                     <label>Phase: </label>
                     <input
                         type="text"
-                        // onChange={handleChange}
+                        // onChange={props.handleChange}
                         placeholder="0"
                     />
                 </div>
@@ -62,10 +68,18 @@ export default function Settings(props) {
                     <label>Shiny Charm? </label>
                     <input
                         type="checkbox"
-                        // onChange={handleChange}
+                        // onChange={props.handleChange}
                         name="shiny-charm"
                         value="shiny-charm"
                     />
+                </div>
+                <div className="delete-hunt">
+                    <label>X (delete)</label>
+                </div>
+                <div className="active-button">
+                    <button className="active">
+                        Active
+                    </button>
                 </div>
             {/* </form> */}
         </div>

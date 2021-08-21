@@ -4,21 +4,42 @@ import CounterHunts from './components/CounterHunts';
 
 function App() {
 
-  const [target, setTarget] = useState("pikachu");
-  const [targetImg, setTargetImg] = useState("");
+  const [activeTarget, setTarget] = useState("pikachu");
+  const [activeTargetImg, setTargetImg] = useState("");
   const [step, setStep] = useState(1);
   const [counter, setCounter] = useState(0);
-  const [hunts, setHunts] = useState([]);
+  const [hunts, setHunts] = useState([{target: "", targetImg: ""}, {target: "", targetImg: ""}]);
 
-  const getPokemon = async () => {
+  const getPokemon = async (target, index) => {
     try {
+      console.log(`updating ${index} with ${target}`);
       const url = `https://pokeapi.co/api/v2/pokemon/${target}`;
       const res = await axios.get(url);
-      setTargetImg(res.data.sprites["front_shiny"]);
+      let newHunts = [...hunts];
+      newHunts[index].target = target;
+      newHunts[index].targetImg = res.data.sprites["front_shiny"];
+      setHunts(newHunts);
       console.log(res);
     } catch (e) {
+      // TODO:
       // Handle error: 404
       // Invalid pokemon name entered -- no sprite
+      console.log(e);
+    }
+  };
+
+  const updateHunt = async () => {
+    console.log(counter);
+    try {
+      const url = "http://localhost:3001/api/hunt";
+      const res = await axios.post(url, { 
+        "target": activeTarget, 
+        "count": counter, 
+        withCredentials: true 
+      });
+      console.log(res);
+      console.log(res.headers);
+    } catch (e) {
       console.log(e);
     }
   };
@@ -38,11 +59,14 @@ function App() {
       <CounterHunts
         getPokemon={getPokemon}
         setTarget={setTarget}
-        targetImg={targetImg}
+        targetImg={activeTargetImg}
         counter={counter}
         setCounter={setCounter}
         step={step}
         setStep={setStep}
+        updateHunt={updateHunt}
+        hunts={hunts}
+        setHunts={setHunts}
       />
     </div>
   );
