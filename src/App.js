@@ -8,7 +8,7 @@ function App() {
   const [activeTargetImg, setTargetImg] = useState("");
   const [step, setStep] = useState(1);
   const [counter, setCounter] = useState(0);
-  const [hunts, setHunts] = useState([{target: "", targetImg: ""}, {target: "", targetImg: ""}]);
+  const [hunts, setHunts] = useState([]);
 
   const getPokemon = async (target, index) => {
     try {
@@ -16,8 +16,20 @@ function App() {
       const url = `https://pokeapi.co/api/v2/pokemon/${target}`;
       const res = await axios.get(url);
       let newHunts = [...hunts];
-      newHunts[index].target = target;
-      newHunts[index].targetImg = res.data.sprites["front_shiny"];
+      let newHunt = {
+        target: target,
+        targetImg: res.data.sprites["front_shiny"],
+        count: 0,
+        gen: 2,
+        method: "full odds",
+        phase: 0,
+        charm: false,
+        active: false
+      };
+      if (index === hunts.length)
+        newHunts.push(newHunt);
+      else
+        newHunts[index] = newHunt;
       setHunts(newHunts);
       console.log(res);
     } catch (e) {

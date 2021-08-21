@@ -7,18 +7,18 @@ export default function Settings(props) {
         // props.getPokemon(index);
         // console.log(e);
         props.updateHunt();
-    }
+    };
 
     const handleChange = (index) => (e) => {
         // console.log(e.target);
         props.getPokemon(e.target.value, index);
         console.log("calling getPokemon:", e.target.value, index);
         props.setTarget(e.target.value.toLowerCase());
-    }
+    };
 
     return (
         <div>
-            <h3>Settings</h3>
+            {/* <h3>Settings</h3> */}
             <img className="target-sprite" src={props.targetImg} alt="Pokemon Sprite"/>
             <form onSubmit={handleSubmit}>
                 <div className="target-input">
@@ -30,6 +30,12 @@ export default function Settings(props) {
                     />
                 </div>
             </form> {/* form won't submit if i include all inputs */}
+                <div className="count-input">
+                    <input
+                        type="text"
+                        placeholder="0"
+                    />
+                </div>
                 <div className="gen-input">
                     <label>Gen: </label>
                     <select name="gen" className="gen-dropdown">
