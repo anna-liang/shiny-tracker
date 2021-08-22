@@ -4,10 +4,11 @@ import CounterHunts from './components/CounterHunts';
 
 function App() {
 
-  const [activeTarget, setTarget] = useState("pikachu");
-  const [activeTargetImg, setTargetImg] = useState("");
+  const [activeTarget, setActiveTarget] = useState("pikachu");
+  const [activeTargetImg, setActiveTargetImg] = useState("");
   const [step, setStep] = useState(1);
-  const [counter, setCounter] = useState(0);
+  const [activeCounter, setActiveCounter] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   const [hunts, setHunts] = useState([]);
 
   const getPokemon = async (target, index) => {
@@ -41,12 +42,12 @@ function App() {
   };
 
   const updateHunt = async () => {
-    console.log(counter);
+    console.log(activeCounter);
     try {
       const url = "http://localhost:3001/api/hunt";
       const res = await axios.post(url, { 
         "target": activeTarget, 
-        "count": counter, 
+        "count": activeCounter, 
         withCredentials: true 
       });
       console.log(res);
@@ -54,6 +55,13 @@ function App() {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const activePokemon = (hunt, index) => {
+    setActiveTarget(hunt.target);
+    setActiveTargetImg(hunt.targetImg);
+    setActiveCounter(hunt.count);
+    setActiveIndex(index);
   };
 
   // const getPokemonSprite = async () => {
@@ -70,15 +78,17 @@ function App() {
     <div className="App">
       <CounterHunts
         getPokemon={getPokemon}
-        setTarget={setTarget}
-        targetImg={activeTargetImg}
-        counter={counter}
-        setCounter={setCounter}
+        setActiveTarget={setActiveTarget}
+        activePokemon={activePokemon}
+        activeTargetImg={activeTargetImg}
+        activeCounter={activeCounter}
+        setActiveCounter={setActiveCounter}
         step={step}
         setStep={setStep}
         updateHunt={updateHunt}
         hunts={hunts}
         setHunts={setHunts}
+        activeIndex={activeIndex}
       />
     </div>
   );

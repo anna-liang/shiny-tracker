@@ -6,18 +6,22 @@ export default function CounterHunts(props) {
     return (
         <div>
             <Counter
-                targetImg={props.targetImg}
-                counter={props.counter}
-                setCounter={props.setCounter}
+                activeTargetImg={props.activeTargetImg}
+                activeCounter={props.activeCounter}
+                setActiveCounter={props.setActiveCounter}
                 step={props.step}
                 setStep={props.setStep}
+                activeIndex={props.activeIndex}
+                hunts={props.hunts}
+                setHunts={props.setHunts}
             />
             <Hunts
                 getPokemon={props.getPokemon}
-                setTarget={props.setTarget}
+                setActiveTarget={props.setActiveTarget}
                 updateHunt={props.updateHunt}
                 hunts={props.hunts}
                 setHunts={props.setHunts}
+                activePokemon={props.activePokemon}
             />
         </div>
     )

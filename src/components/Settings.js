@@ -1,4 +1,5 @@
 import React from 'react'
+import '../styles/Settings.css';
 
 export default function Settings(props) {
 
@@ -7,28 +8,41 @@ export default function Settings(props) {
         props.updateHunt();
     };
 
-    const handleChange = (index) => (e) => {
-        props.getPokemon(e.target.value, index);
-        console.log("calling getPokemon:", e.target.value, index);
-        props.setTarget(e.target.value.toLowerCase());
+    const handleChange = (e) => {
+        props.getPokemon(e.target.value, props.index);
+        console.log("calling getPokemon:", e.target.value, props.index);
+        props.setActiveTarget(e.target.value.toLowerCase());
     };
 
-    const handleDelete = index => (e) => {
+    const handleDelete = (e) => {
         let newHunts = [...props.hunts];
-        newHunts.splice(index, 1);
+        newHunts.splice(props.index, 1);
         props.setHunts(newHunts);
         document.getElementById("settings-form").reset();
     };
 
+    const handleActivate = (e) => {
+        let newHunts = [...props.hunts];
+        newHunts.map((hunt) => {
+            if (hunt.active)
+                hunt.active = false;
+        });
+        newHunts[props.index].active = true;
+        props.setHunts(newHunts);
+        props.activePokemon(props.hunt, props.index);
+        console.log("set active target to ", props.hunt.target);
+        console.log(newHunts);
+    };
+
     return (
         <div>
-            <img className="target-sprite" src={props.targetImg} alt="Pokemon Sprite"/>
+            <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
             <form id="settings-form" onSubmit={handleSubmit}>
                 <div className="target-input">
                     <label>Target: </label>
                     <input
                         type="text"
-                        onChange={handleChange(props.index)}
+                        onChange={handleChange}
                         placeholder="Enter Pok&eacute;mon"
                     />
                 </div>
@@ -36,7 +50,7 @@ export default function Settings(props) {
                 <div className="count-input">
                     <input
                         type="text"
-                        placeholder="0"
+                        placeholder={props.hunt.count}
                     />
                 </div>
                 <div className="gen-input">
@@ -83,11 +97,11 @@ export default function Settings(props) {
                     />
                 </div>
             </form> {/* form won't submit if i include all inputs */}
-                <button className="delete-hunt" onClick={handleDelete(props.index)}>
+                <button className="delete-hunt" onClick={handleDelete}>
                     Delete
                 </button>
                 <div className="active-button">
-                    <button className="active">
+                    <button className="active" onClick={handleActivate}>
                         Active
                     </button>
                 </div>
