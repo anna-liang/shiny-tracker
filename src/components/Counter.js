@@ -3,14 +3,19 @@ import React from 'react';
 export default function Counter(props) {
 
     const handleCountClick = (action) => (e) => {
-        if (action === "increment")
-            props.setActiveCounter(props.activeCounter + props.step);
-        else if (action === "decrement")
-            props.setActiveCounter(Math.max(props.activeCounter - props.step, 0));
-        else if (action === "reset")
-            props.setActiveCounter(0);
         let newHunts = [...props.hunts];
-        newHunts[props.activeIndex].count = props.activeCounter;
+        if (action === "increment") {
+            props.setActiveCounter(props.activeCounter + props.step);
+            newHunts[props.activeIndex].count = props.activeCounter + props.step;
+        }
+        else if (action === "decrement") {
+            props.setActiveCounter(Math.max(props.activeCounter - props.step, 0));
+            newHunts[props.activeIndex].count = Math.max(props.activeCounter - props.step, 0);
+        }
+        else if (action === "reset") {
+            props.setActiveCounter(0);
+            newHunts[props.activeIndex].count = 0;
+        }
         props.setHunts(newHunts);
     };
 

@@ -5,13 +5,14 @@ export default function Settings(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.updateHunt();
-    };
-
-    const handleChange = (e) => {
-        props.getPokemon(e.target.value, props.index);
-        console.log("calling getPokemon:", e.target.value, props.index);
-        props.setActiveTarget(e.target.value.toLowerCase());
+        let target = e.target.elements[0].value.toLowerCase();
+        props.getPokemon(target, props.index);
+        console.log("calling getPokemon:", target, props.index);
+        if (props.hunt.active) {
+            props.setActiveTarget(target);
+            props.activePokemon(props.hunt, props.index);
+        }
+        // props.updateHunt();
     };
 
     const handleDelete = (e) => {
@@ -30,29 +31,43 @@ export default function Settings(props) {
         newHunts[props.index].active = true;
         props.setHunts(newHunts);
         props.activePokemon(props.hunt, props.index);
-        console.log("set active target to ", props.hunt.target);
-        console.log(newHunts);
+    };
+
+    const handleCount = (e) => {
+        e.preventDefault();
+        let count = parseInt(e.target.elements[0].value);
+        console.log("setting new count to", count);
+        let newHunts = [...props.hunts];
+        // props.hunt.count = count;
+        if (props.hunt.active) {
+            props.setActiveCounter(count);
+            newHunts[props.activeIndex].count = count;
+        }
+        props.setHunts(newHunts);
     };
 
     return (
         <div>
             <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
-            <form id="settings-form" onSubmit={handleSubmit}>
+            <form id="target-form" onSubmit={handleSubmit}>
                 <div className="target-input">
                     <label>Target: </label>
                     <input
                         type="text"
-                        onChange={handleChange}
                         placeholder="Enter Pok&eacute;mon"
                     />
                 </div>
-            
+            </form>
+            <form id="count-form" onSubmit={handleCount}>
                 <div className="count-input">
+                    <label>Count: </label>
                     <input
                         type="text"
-                        placeholder={props.hunt.count}
+                        className="count-textbox"
+                        defaultValue={props.hunt.count}
                     />
                 </div>
+            </form>
                 <div className="gen-input">
                     <label>Gen: </label>
                     <select name="gen" className="gen-dropdown">
@@ -84,7 +99,8 @@ export default function Settings(props) {
                     <input
                         type="text"
                         // onChange={props.handleChange}
-                        placeholder="0"
+                        // placeholder={props.hunt.phase}
+                        defaultValue={props.hunt.phase}
                     />
                 </div>
                 <div className="shiny-charm">
@@ -96,7 +112,7 @@ export default function Settings(props) {
                         value="shiny-charm"
                     />
                 </div>
-            </form> {/* form won't submit if i include all inputs */}
+            {/* </form> form won't submit if i include all inputs */}
                 <button className="delete-hunt" onClick={handleDelete}>
                     Delete
                 </button>

@@ -15,6 +15,8 @@ export default function Hunts(props) {
                     <Settings 
                         getPokemon={props.getPokemon}
                         setActiveTarget={props.setActiveTarget}
+                        setActiveCounter={props.setActiveCounter}
+                        activeIndex={props.activeIndex}
                         updateHunt={props.updateHunt}
                         setHunts={props.setHunts}
                         index={index}

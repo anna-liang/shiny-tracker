@@ -31,6 +31,8 @@ function App() {
         newHunts.push(newHunt);
       else
         newHunts[index] = newHunt;
+      if (index === activeIndex)
+        setActiveTargetImg(newHunt.targetImg);
       setHunts(newHunts);
       console.log(res);
     } catch (e) {
@@ -58,10 +60,13 @@ function App() {
   };
 
   const activePokemon = (hunt, index) => {
+    console.log(hunt, index);
     setActiveTarget(hunt.target);
     setActiveTargetImg(hunt.targetImg);
     setActiveCounter(hunt.count);
     setActiveIndex(index);
+    console.log("set active target to ", hunt.target);
+    // console.log(newHunts);
   };
 
   // const getPokemonSprite = async () => {
