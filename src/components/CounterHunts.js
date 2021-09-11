@@ -18,7 +18,10 @@ export default function CounterHunts(props) {
             <Hunts
                 getPokemon={props.getPokemon}
                 setActiveTarget={props.setActiveTarget}
+                activeCounter={props.activeCounter}
                 setActiveCounter={props.setActiveCounter}
+                step={props.step}
+                setStep={props.setStep}
                 activeIndex={props.activeIndex}
                 updateHunt={props.updateHunt}
                 hunts={props.hunts}

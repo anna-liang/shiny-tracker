@@ -63,9 +63,10 @@ function App() {
     console.log(hunt, index);
     setActiveTarget(hunt.target);
     setActiveTargetImg(hunt.targetImg);
+    console.log(hunt.count);
     setActiveCounter(hunt.count);
     setActiveIndex(index);
-    console.log("set active target to ", hunt.target);
+    console.log("set active target to ", hunt.target, hunt.active);
     // console.log(newHunts);
   };
 

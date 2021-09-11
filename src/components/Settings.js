@@ -23,28 +23,34 @@ export default function Settings(props) {
     };
 
     const handleActivate = (e) => {
+        let oldActiveState = props.hunt.active;
+        // if (!oldActiveState)
+        //     props.activePokemon(props.hunt, props.index);
+        // if pokemon is being set to inactive, don't want to run below or doesn't matter?
+        // need to remove it from active target, etc.
         let newHunts = [...props.hunts];
         newHunts.map((hunt) => {
             if (hunt.active)
                 hunt.active = false;
         });
-        newHunts[props.index].active = true;
+        // newHunts[props.index].active = true;
+        newHunts[props.index].active = !oldActiveState;
+        console.log(newHunts[props.index].target, "old state", oldActiveState, "new state", newHunts[props.index].active);
         props.setHunts(newHunts);
-        props.activePokemon(props.hunt, props.index);
     };
 
-    const handleCount = (e) => {
-        e.preventDefault();
-        let count = parseInt(e.target.elements[0].value);
-        console.log("setting new count to", count);
-        let newHunts = [...props.hunts];
-        // props.hunt.count = count;
-        if (props.hunt.active) {
-            props.setActiveCounter(count);
-            newHunts[props.activeIndex].count = count;
-        }
-        props.setHunts(newHunts);
-    };
+    // const handleCount = (e) => {
+    //     e.preventDefault();
+    //     let count = parseInt(e.target.elements[0].value);
+    //     console.log("setting new count to", count);
+    //     let newHunts = [...props.hunts];
+    //     if (props.hunt.active) {
+    //         props.setActiveCounter(count);
+    //         newHunts[props.activeIndex].count = count;
+    //     }
+    //     props.hunt.count = count;
+    //     props.setHunts(newHunts);
+    // };
 
     return (
         <div>
@@ -55,19 +61,14 @@ export default function Settings(props) {
                     <input
                         type="text"
                         placeholder="Enter Pok&eacute;mon"
+                        defaultValue={props.hunt.target}
                     />
                 </div>
             </form>
-            <form id="count-form" onSubmit={handleCount}>
-                <div className="count-input">
+                <div className="count">
                     <label>Count: </label>
-                    <input
-                        type="text"
-                        className="count-textbox"
-                        defaultValue={props.hunt.count}
-                    />
+                    <p>{props.hunt.count}</p>
                 </div>
-            </form>
                 <div className="gen-input">
                     <label>Gen: </label>
                     <select name="gen" className="gen-dropdown">
