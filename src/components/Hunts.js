@@ -24,24 +24,27 @@ export default function Hunts(props) {
                 </div>
             </form>
             {props.hunts.map(function(hunt, index) {
-                return (
-                <div key={index}>
-                    <div>{hunt.target}</div>
-                    <Settings 
-                        getPokemon={props.getPokemon}
-                        setActiveTarget={props.setActiveTarget}
-                        activeCounter={props.activeCounter}
-                        setActiveCounter={props.setActiveCounter}
-                        activeIndex={props.activeIndex}
-                        updateHunt={props.updateHunt}
-                        setHunts={props.setHunts}
-                        index={index}
-                        hunts={props.hunts}
-                        hunt={hunt}
-                        activePokemon={props.activePokemon}
-                    />
-                </div>
-                );
+                if (index > 0) {
+                    return (
+                    <div key={index}>
+                        <div>{hunt.target}</div>
+                        <Settings 
+                            getPokemon={props.getPokemon}
+                            setActiveTarget={props.setActiveTarget}
+                            activeCounter={props.activeCounter}
+                            setActiveCounter={props.setActiveCounter}
+                            activeIndex={props.activeIndex}
+                            revertDefault={props.revertDefault}
+                            updateHunt={props.updateHunt}
+                            setHunts={props.setHunts}
+                            index={index}
+                            hunts={props.hunts}
+                            hunt={hunt}
+                            activePokemon={props.activePokemon}
+                        />
+                    </div>
+                    );
+                }
             })}
         </div>
     )

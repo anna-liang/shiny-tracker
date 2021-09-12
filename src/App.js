@@ -8,8 +8,17 @@ function App() {
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [step, setStep] = useState(1);
   const [activeCounter, setActiveCounter] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [hunts, setHunts] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hunts, setHunts] = useState([{
+    target: '',
+    targetImg: '',
+    count: 0,
+    gen: 2,
+    method: "full odds",
+    phase: 0,
+    charm: false,
+    active: false
+  }]);
 
   const getPokemon = async (target, index) => {
     try {
@@ -70,6 +79,14 @@ function App() {
     // console.log(newHunts);
   };
 
+  const revertDefault = () => {
+    setActiveTarget('');
+    setActiveTargetImg('');
+    setActiveCounter(0);
+    setActiveIndex(0);
+    console.log("reverting to default");
+  }
+
   // const getPokemonSprite = async () => {
   //   try {
   //     const url = `https://play.pokemonshowdown.com/sprites/ani-shiny/pikachu.gif`;
@@ -89,6 +106,7 @@ function App() {
         activeTargetImg={activeTargetImg}
         activeCounter={activeCounter}
         setActiveCounter={setActiveCounter}
+        revertDefault={revertDefault}
         step={step}
         setStep={setStep}
         updateHunt={updateHunt}

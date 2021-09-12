@@ -19,13 +19,18 @@ export default function Settings(props) {
         let newHunts = [...props.hunts];
         newHunts.splice(props.index, 1);
         props.setHunts(newHunts);
-        document.getElementById("settings-form").reset();
+        document.getElementById("target-form").reset();
+        if (props.hunt.active)
+            props.revertDefault();
     };
 
     const handleActivate = (e) => {
         let oldActiveState = props.hunt.active;
-        // if (!oldActiveState)
-        //     props.activePokemon(props.hunt, props.index);
+        // if inactive to active
+        if (!oldActiveState)
+            props.activePokemon(props.hunt, props.index);
+        else
+            props.revertDefault();
         // if pokemon is being set to inactive, don't want to run below or doesn't matter?
         // need to remove it from active target, etc.
         let newHunts = [...props.hunts];

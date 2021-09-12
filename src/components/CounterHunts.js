@@ -20,6 +20,7 @@ export default function CounterHunts(props) {
                 setActiveTarget={props.setActiveTarget}
                 activeCounter={props.activeCounter}
                 setActiveCounter={props.setActiveCounter}
+                revertDefault={props.revertDefault}
                 step={props.step}
                 setStep={props.setStep}
                 activeIndex={props.activeIndex}
