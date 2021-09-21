@@ -33,14 +33,15 @@ app.use(cors({
 var Hunt = (function() {
     let time = Date.now();
     let date = new Date(time);
-    return function item(target, count, gen, method, phase, charm, active) {
+    return function item(target, targetImg, count, gen, method, phase, charm, active) {
         this.target = target;
+        this.targetImg = targetImg;
         this.count = count;
-        // this.gen = gen;
-        // this.method = method;
-        // this.phase = phase;
-        // this.charm = charm;
-        // this.active = active;
+        this.gen = gen;
+        this.method = method;
+        this.phase = phase;
+        this.charm = charm;
+        this.active = active;
         this.date = date;
     };
 }());
@@ -63,9 +64,16 @@ app.post('/api/hunt/', function (req, res, next) {
     // !!! needs to be a list of hunts (pokemon name acts as id)
     var hunt = new Hunt(
         req.body.target,
-        req.body.count
+        req.body.targetImg,
+        req.body.count,
+        req.body.gen,
+        req.body.method,
+        req.body.phase,
+        req.body.charm,
+        req.body.active
+
     );
-    console.log("NEW HUNT", hunt);
+    console.log("NEW HUNT:", hunt);
     console.log(req.cookies);
     if (req.cookies.hunts == undefined) {
         console.log("no hunts");
@@ -92,17 +100,48 @@ app.post('/api/hunt/', function (req, res, next) {
 
 // Update Hunt???? (can you update a hunt that's not a target?)
 app.patch('/api/hunt/', function (req, res, next) {
-
+    var hunt = new Hunt(
+        req.body.target,
+        req.body.targetImg,
+        req.body.count,
+        req.body.gen,
+        req.body.method,
+        req.body.phase,
+        req.body.charm,
+        req.body.active
+    );
+    console.log("PATCH HUNT:", hunt);
+    var newHunts = JSON.parse(req.cookies.hunts);
+    newHunts.push(hunt);
+    console.log(newHunts);
+    newHunts.map(function(h, index) {
+        if (h.id === req.body.id)
+            h = hunt
+    });
+    res.setHeader('Set-Cookie', cookie.serialize('hunts', newHunts, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7
+    }));
 });
 
-// Update Target
-app.patch('/api/target/', function (req, res, next) {
+// // Update Target
+// app.patch('/api/target/', function (req, res, next) {
 
-});
+// });
 
 // Delete Hunt (can be more than one)
 app.delete('/api/hunt/', function (req, res, next) {
-
+    var newHunts = JSON.parse(req.cookies.hunts);
+    newHunts.push(hunt);
+    console.log(newHunts);
+    for (var i = 0; i < newHunts.length; i++) {
+        if (newHunts[i].id == req.body.id)
+            newHunts.splice(i, 1);
+    }
+    res.setHeader('Set-Cookie', cookie.serialize('hunts', newHunts, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7
+    }));
 });
 
 
