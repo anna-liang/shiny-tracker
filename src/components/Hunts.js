@@ -1,5 +1,6 @@
 import React from 'react';
 import Settings from './Settings';
+import Button from '@mui/material/Button';
 
 export default function Hunts(props) {
 
@@ -11,9 +12,12 @@ export default function Hunts(props) {
 
     return (
         <div>
-            <button onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}>
+            <Button 
+                variant="outlined" 
+                onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}
+            >
                 New Hunt
-            </button>
+            </Button>
             <form id="step-form" onSubmit={handleStep}>
                 <div className="step-input">
                     <label>Step: </label>

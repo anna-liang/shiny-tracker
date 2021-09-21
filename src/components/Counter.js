@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@mui/material/Button';
 
 export default function Counter(props) {
 
@@ -26,16 +27,28 @@ export default function Counter(props) {
                 {props.activeCounter}
             </div>
             <div className="counter-buttons">
-                <button className="decrement" onClick={handleCountClick("decrement")}>
+                <Button 
+                    variant="contained" 
+                    color="error" 
+                    onClick={handleCountClick("decrement")}
+                >
                     -
-                </button>
-                <button className="increment" onClick={handleCountClick("increment")}>
+                </Button>
+                <Button 
+                    variant="contained" 
+                    color="success" 
+                    onClick={handleCountClick("increment")}
+                >
                     +
-                </button>
+                </Button>
             </div>
-            <button className="reset" onClick={handleCountClick("reset")}>
+            <Button 
+                variant="outlined" 
+                color="error" 
+                onClick={handleCountClick("reset")}
+            >
                 Reset
-            </button>
+            </Button>
         </div>
     )
 }

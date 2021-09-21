@@ -31,14 +31,11 @@ export default function Settings(props) {
             props.activePokemon(props.hunt, props.index);
         else
             props.revertDefault();
-        // if pokemon is being set to inactive, don't want to run below or doesn't matter?
-        // need to remove it from active target, etc.
         let newHunts = [...props.hunts];
         newHunts.map((hunt) => {
             if (hunt.active)
                 hunt.active = false;
         });
-        // newHunts[props.index].active = true;
         newHunts[props.index].active = !oldActiveState;
         console.log(newHunts[props.index].target, "old state", oldActiveState, "new state", newHunts[props.index].active);
         props.setHunts(newHunts);
@@ -122,6 +119,12 @@ export default function Settings(props) {
                 <button className="delete-hunt" onClick={handleDelete}>
                     Delete
                 </button>
+                {/* <IconButton aria-label="delete" onClick={handleDelete}> */}
+                    {/* <DeleteIcon /> */}
+                {/* </IconButton> */}
+                <span class="material-icons-outlined">
+                delete
+                </span>
                 <div className="active-button">
                     <button className="active" onClick={handleActivate}>
                         Active
