@@ -1,4 +1,11 @@
 import React from 'react'
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import '../styles/Settings.css';
 
 export default function Settings(props) {
@@ -59,60 +66,70 @@ export default function Settings(props) {
             <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
             <form id="target-form" onSubmit={handleSubmit}>
                 <div className="target-input">
-                    <label>Target: </label>
-                    <input
-                        type="text"
-                        placeholder="Enter Pok&eacute;mon"
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Pok&eacute;mon"
                         defaultValue={props.hunt.target}
                     />
                 </div>
             </form>
                 <div className="count">
-                    <label>Count: </label>
                     <p>{props.hunt.count}</p>
                 </div>
                 <div className="gen-input">
-                    <label>Gen: </label>
-                    <select name="gen" className="gen-dropdown">
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </select>
+                    <InputLabel>Gen</InputLabel>
+                    <Select
+                        defaultValue={props.hunt.gen}
+                        label="Gen"
+                    >
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                        <MenuItem value={4}>4</MenuItem>
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={6}>6</MenuItem>
+                        <MenuItem value={6}>7</MenuItem>
+                        <MenuItem value={7}>8</MenuItem>
+                    </Select>
                 </div>
                 <div className="method-input">
-                    <label>Method: </label>
-                    <select name="method" className="method-dropdown">
-                        <option value="full-odds">Full Odds</option>
-                        <option value="random">Random Encounter</option>
-                        <option value="sr">SR</option>
-                        <option value="masuda">Masuda Method</option>
-                        <option value="dexnav">Dex Nav</option>
-                        <option value="friend-safari">Friend Safari</option>
-                        <option value="radar">Radar Chaining</option>
-                        <option value="fishing">Chain Fishing</option>
-                        <option value="sos">S.O.S</option>
-                    </select>
+                    <InputLabel>Method</InputLabel>
+                    <Select
+                        defaultValue={props.hunt.method}
+                        label="Method"
+                    >
+                        <MenuItem value={"full-odds"}>Full Odds</MenuItem>
+                        <MenuItem value={"random"}>Random Encounter</MenuItem>
+                        <MenuItem value={"sr"}>Soft Reset</MenuItem>
+                        <MenuItem value={"masuda"}>Masuda Method</MenuItem>
+                        <MenuItem value={"dexnav"}>Dex Nav</MenuItem>
+                        <MenuItem value={"friend-safari"}>Friend Safari</MenuItem>
+                        <MenuItem value={"radar"}>Radar Chaining</MenuItem>
+                        <MenuItem value={"fishing"}>Chain Fishing</MenuItem>
+                        <MenuItem value={"sos"}>S.O.S</MenuItem>
+                    </Select>
                 </div>
                 <div className="phase-input">
-                    <label>Phase: </label>
-                    <input
-                        type="text"
-                        // onChange={props.handleChange}
-                        // placeholder={props.hunt.phase}
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Phase"
                         defaultValue={props.hunt.phase}
                     />
                 </div>
                 <div className="shiny-charm">
-                    <label>Shiny Charm? </label>
+                    {/* <label>Shiny Charm? </label>
                     <input
                         type="checkbox"
                         // onChange={props.handleChange}
                         name="shiny-charm"
                         value="shiny-charm"
+                    /> */}
+                    <FormControlLabel
+                        value="Shiny Charm"
+                        control={<Checkbox />}
+                        label="Shiny Charm?"
+                        labelPlacement="start"
                     />
                 </div>
             {/* </form> form won't submit if i include all inputs */}
@@ -122,13 +139,14 @@ export default function Settings(props) {
                 {/* <IconButton aria-label="delete" onClick={handleDelete}> */}
                     {/* <DeleteIcon /> */}
                 {/* </IconButton> */}
-                <span class="material-icons-outlined">
-                delete
-                </span>
                 <div className="active-button">
-                    <button className="active" onClick={handleActivate}>
+                    <Button 
+                        variant="outlined" 
+                        color="success" 
+                        onClick={handleActivate}
+                    >
                         Active
-                    </button>
+                    </Button>
                 </div>
             {/* </form> */}
         </div>

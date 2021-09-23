@@ -15,7 +15,7 @@ function App() {
     targetImg: '',
     count: 0,
     gen: 2,
-    method: "full odds",
+    method: "full-odds",
     phase: 0,
     charm: false,
     active: false
@@ -64,7 +64,7 @@ function App() {
         "targetImg": targetImg,
         "count": 0,
         "gen": 2,
-        "method": "full odds",
+        "method": "full-odds",
         "phase": 0,
         "charm": false,
         "active": false,
