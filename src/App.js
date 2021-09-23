@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import CounterHunts from './components/CounterHunts';
+import Login from './components/Login';
 
 function App() {
 
@@ -20,34 +21,67 @@ function App() {
     active: false
   }]);
 
-  const getPokemon = async (target, index) => {
+  const getPokemon = async (target) => {
     try {
-      console.log(`updating ${index} with ${target}`);
       const url = `https://pokeapi.co/api/v2/pokemon/${target}`;
       const res = await axios.get(url);
-      let newHunts = [...hunts];
-      let newHunt = {
-        target: target,
-        targetImg: res.data.sprites["front_shiny"],
-        count: 0,
-        gen: 2,
-        method: "full odds",
-        phase: 0,
-        charm: false,
-        active: false
-      };
-      if (index === hunts.length)
-        newHunts.push(newHunt);
-      else
-        newHunts[index] = newHunt;
-      if (index === activeIndex)
-        setActiveTargetImg(newHunt.targetImg);
-      setHunts(newHunts);
-      console.log(res);
+      // let newHunts = [...hunts];
+      // let newHunt = {
+      //   target: target,
+      //   targetImg: res.data.sprites["front_shiny"],
+      //   count: 0,
+      //   gen: 2,
+      //   method: "full odds",
+      //   phase: 0,
+      //   charm: false,
+      //   active: false
+      // };
+      // if (index === hunts.length)
+      //   newHunts.push(newHunt);
+      // else
+      //   newHunts[index] = newHunt;
+      // if (index === activeIndex)
+      //   setActiveTargetImg(newHunt.targetImg);
+      // setHunts(newHunts);
+      // console.log(res);
+      return res.data.sprites["front_shiny"];
     } catch (e) {
       // TODO:
       // Handle error: 404
       // Invalid pokemon name entered -- no sprite
+      console.log(e);
+    }
+  };
+
+  const newHunt = async (target, index) => {
+    console.log(`updating ${index} with ${target}`);
+    let targetImg = await getPokemon(target);
+    console.log(targetImg);
+    try {
+      const url = "http://localhost:3001/api/hunt";
+      const res = await axios.post(url, { 
+        "target": target, 
+        "targetImg": targetImg,
+        "count": 0,
+        "gen": 2,
+        "method": "full odds",
+        "phase": 0,
+        "charm": false,
+        "active": false,
+        // withCredentials: true 
+      });
+      let newHunts = [...hunts];
+      // newHunt = res.data;
+      if (index === hunts.length)
+        newHunts.push(res.data);
+      else
+        newHunts[index] = res.data;
+      if (index === activeIndex)
+        setActiveTargetImg(res.data.targetImg);
+      setHunts(newHunts);
+      console.log(res);
+      console.log(res.headers);
+    } catch (e) {
       console.log(e);
     }
   };
@@ -59,7 +93,7 @@ function App() {
       const res = await axios.post(url, { 
         "target": activeTarget, 
         "count": activeCounter, 
-        withCredentials: true 
+        // withCredentials: true 
       });
       console.log(res);
       console.log(res.headers);
@@ -87,20 +121,11 @@ function App() {
     console.log("reverting to default");
   }
 
-  // const getPokemonSprite = async () => {
-  //   try {
-  //     const url = `https://play.pokemonshowdown.com/sprites/ani-shiny/pikachu.gif`;
-  //     const res = await axios.get(url);
-  //     console.log(res);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
-
   return (
     <div className="App">
+      <Login/>
       <CounterHunts
-        getPokemon={getPokemon}
+        getPokemon={newHunt}
         setActiveTarget={setActiveTarget}
         activePokemon={activePokemon}
         activeTargetImg={activeTargetImg}
