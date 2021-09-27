@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Autocomplete from '@mui/material/Autocomplete';
 import '../styles/Settings.css';
 
 export default function Settings(props) {
@@ -48,29 +50,38 @@ export default function Settings(props) {
         props.setHunts(newHunts);
     };
 
-    // const handleCount = (e) => {
-    //     e.preventDefault();
-    //     let count = parseInt(e.target.elements[0].value);
-    //     console.log("setting new count to", count);
-    //     let newHunts = [...props.hunts];
-    //     if (props.hunt.active) {
-    //         props.setActiveCounter(count);
-    //         newHunts[props.activeIndex].count = count;
-    //     }
-    //     props.hunt.count = count;
-    //     props.setHunts(newHunts);
-    // };
+    const getAllPokemon = async () => {
+        const url = `https://pokeapi.co/api/v2/pokemon-species?limit=1`;
+        const res = await axios.get(url);
+        console.log("getting all pokemon");
+        console.log(res.data.results);
+        // console.log(typeof([]));
+        // let result = [res.data.results[0]]
+        return Object.entries(res.data.results);
+    };
 
     return (
         <div>
             <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
             <form id="target-form" onSubmit={handleSubmit}>
                 <div className="target-input">
-                    <TextField
+                    {/* <TextField
                         required
-                        id="outlined-required"
                         label="Pok&eacute;mon"
                         defaultValue={props.hunt.target}
+                    /> */}
+                    <Autocomplete
+                        disablePortal
+                        required
+                        autoComplete
+                        id="target-input"
+                        sx={{ width: 300 }}
+                        // options={getAllPokemon().then((res) => {
+                        //     console.log("results", Object.entries(res)[0]);
+                        //     return Object.entries(res)[0];
+                        // })}
+                        options={['test']}
+                        renderInput={(params) => <TextField {...params} label="Pok&eacute;mon"/>}
                     />
                 </div>
             </form>
