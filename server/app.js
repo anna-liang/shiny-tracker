@@ -13,6 +13,28 @@ app.use(cookieParser());
 
 app.use(express.static('public'));
 
+const util = require('util');
+const TextEncoder = new util.TextEncoder();
+
+const { MongoClient } = require('mongodb');
+
+const uri = process.env.SHINY_TRACKER_MONGO_URI;
+
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect((err) => {
+    if (err)
+        throw err;
+    // console.log();
+    
+    // dbo.collection("testing").insertOne({ test:"test" }).then(() => {console.log("inserted")}).catch((err) => { if (err) throw err;});
+    // MongoClient.connect
+    console.log("MongoDB database connected successfully");
+    // client.close();
+});
+
+// let dbo = client.db('users');
+// dbo.collection("testing").insertOne({ test:"test" }).then(() => {console.log("inserted")}).catch((err) => { if (err) throw err;});
+
 const cors = require('cors');
 app.use(cors({
   origin:'http://localhost:3000',
@@ -63,12 +85,13 @@ var isAuthenticated = function(req, res, next) {
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
 app.post('/signup/', function (req, res, next) {
     console.log("signed up");
-    // var username = req.body.username;
-    // var password = req.body.password;
-    // var salt = crypto.randomBytes(16).toString('base64');
-    // var hash = crypto.createHmac('sha512', salt);
-    // hash.update(password);
-    // var saltedHash = hash.digest('base64');
+    var username = req.body.username;
+    var password = req.body.password;
+    var salt = crypto.randomBytes(16).toString('base64');
+    var hash = crypto.createHmac('sha512', salt);
+    hash.update(password);
+    var saltedHash = hash.digest('base64');
+    
     // users.findOne({_id: username}, function(err, user){
     //     if (err) return res.status(500).end(err);
     //     if (user) return res.status(409).end("username " + username + " already exists");
