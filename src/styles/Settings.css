@@ -1,0 +1,39 @@
+.settings {
+    display: flex;
+}
+
+.col1, .col2, .col3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 25px;
+    height: 190px;
+}
+
+.target-sprite {
+    width: 175px;
+    height: 175px;
+}
+
+.count {
+    margin: 50px;
+    font-size: x-large;
+}
+
+.shiny-charm {
+    display: flex;
+    margin-top: 25px;
+}
+
+.settings-btn-group {
+    display: flex;
+}
+
+.settings-btn {
+    margin-right: 10px;
+    width: 120px;
+}
+
+.settings-input {
+    width: 200px;
+}

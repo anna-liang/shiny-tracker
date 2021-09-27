@@ -7,6 +7,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import '../styles/Hunts.css';
 
 export default function Hunts(props) {
 
@@ -17,35 +19,36 @@ export default function Hunts(props) {
     };
 
     return (
-        <div>
-            <Button 
-                variant="outlined" 
-                onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}
-            >
-                New Hunt
-            </Button>
-            <form id="step-form" onSubmit={handleStep}>
-                <div className="step-input">
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="Step"
-                        defaultValue={props.step}
-                    />
-                </div>
-            </form>
-            <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <div className="hunts">
+            <div className="new-hunt-step-input">
+                <Button 
+                    id="new-hunt-btn"
+                    variant="outlined" 
+                    onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}
+                >
+                    New Hunt
+                </Button>
+                <form id="step-form" onSubmit={handleStep}>
+                    <div className="step-input">
+                        <InputLabel>Step</InputLabel>
+                        <TextField
+                            required
+                            defaultValue={props.step}
+                        />
+                    </div>
+                </form>
+            </div>
+            <Box className="hunts-box">
                 <List>
                     {props.hunts.map(function(hunt, index) {
                         if (index > 0) {
                             return (
-                                <div key={index}>
+                                <div key={index} className="hunt">
                                     <Divider/>
                                     <ListItem disablePadding key={index}>
                                         <ListItemText 
                                             disableTypography
-                                            primary={hunt.target}
-                                            secondary={
+                                            primary={
                                                 <Settings 
                                                     getPokemon={props.getPokemon}
                                                     setActiveTarget={props.setActiveTarget}

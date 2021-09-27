@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Autocomplete from '@mui/material/Autocomplete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import '../styles/Settings.css';
 
 export default function Settings(props) {
@@ -61,36 +62,35 @@ export default function Settings(props) {
     };
 
     return (
-        <div>
+        <div className="settings">
             <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
-            <form id="target-form" onSubmit={handleSubmit}>
-                <div className="target-input">
-                    {/* <TextField
-                        required
-                        label="Pok&eacute;mon"
-                        defaultValue={props.hunt.target}
-                    /> */}
+            <div className="count">
+                <p>{props.hunt.count}</p>
+            </div>
+            <div className="col1">
+                <form id="target-form" onSubmit={handleSubmit}>
+                    {/* <div className="target-input"> */}
+                    <InputLabel>Pok&eacute;mon</InputLabel>
                     <Autocomplete
                         disablePortal
                         required
                         autoComplete
-                        id="target-input"
-                        sx={{ width: 300 }}
+                        className="settings-input"
+                        // sx={{ width: 200 }}
+                        defaultValue={props.hunt.target}
                         // options={getAllPokemon().then((res) => {
                         //     console.log("results", Object.entries(res)[0]);
                         //     return Object.entries(res)[0];
                         // })}
                         options={['test']}
-                        renderInput={(params) => <TextField {...params} label="Pok&eacute;mon"/>}
+                        renderInput={(params) => <TextField {...params}/>}
                     />
-                </div>
-            </form>
-                <div className="count">
-                    <p>{props.hunt.count}</p>
-                </div>
+                    {/* </div> */}
+                </form>
                 <div className="gen-input">
                     <InputLabel>Gen</InputLabel>
                     <Select
+                        className="settings-input"
                         defaultValue={props.hunt.gen}
                         label="Gen"
                     >
@@ -103,9 +103,12 @@ export default function Settings(props) {
                         <MenuItem value={7}>8</MenuItem>
                     </Select>
                 </div>
+            </div>
+            <div className="col2">
                 <div className="method-input">
                     <InputLabel>Method</InputLabel>
                     <Select
+                        className="settings-input"
                         defaultValue={props.hunt.method}
                         label="Method"
                     >
@@ -121,45 +124,47 @@ export default function Settings(props) {
                     </Select>
                 </div>
                 <div className="phase-input">
+                    <InputLabel>Phase</InputLabel>
                     <TextField
                         required
-                        id="outlined-required"
-                        label="Phase"
+                        className="settings-input"
                         defaultValue={props.hunt.phase}
                     />
                 </div>
+            </div>
+            <div className="col3">
                 <div className="shiny-charm">
-                    {/* <label>Shiny Charm? </label>
-                    <input
-                        type="checkbox"
-                        // onChange={props.handleChange}
-                        name="shiny-charm"
-                        value="shiny-charm"
-                    /> */}
                     <FormControlLabel
+                        className="settings-input"
                         value="Shiny Charm"
                         control={<Checkbox />}
                         label="Shiny Charm?"
                         labelPlacement="start"
                     />
                 </div>
-            {/* </form> form won't submit if i include all inputs */}
-                <button className="delete-hunt" onClick={handleDelete}>
-                    Delete
-                </button>
-                {/* <IconButton aria-label="delete" onClick={handleDelete}> */}
-                    {/* <DeleteIcon /> */}
-                {/* </IconButton> */}
-                <div className="active-button">
-                    <Button 
-                        variant="outlined" 
-                        color="success" 
-                        onClick={handleActivate}
-                    >
-                        Active
-                    </Button>
+                <div className="settings-btn-group">
+                    <div className="settings-btn">
+                        <Button 
+                            className="settings-btn"
+                            variant="outlined"
+                            color="error"
+                            startIcon={<DeleteIcon />}
+                            onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    </div>
+                    <div className="settings-btn">
+                        <Button 
+                            className="settings-btn"
+                            variant="outlined" 
+                            color="success" 
+                            onClick={handleActivate}
+                        >
+                            Active
+                        </Button>
+                    </div>
                 </div>
-            {/* </form> */}
+            </div>
         </div>
     )
 }
