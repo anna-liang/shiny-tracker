@@ -7,6 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import '../styles/Login.css';
 
 export default function Login() {
     const [open, setOpen] = React.useState(false);
@@ -53,41 +54,43 @@ export default function Login() {
 
     return (
         <div>
-            <Button 
-                variant="outlined"
-                onClick={handleClickOpen}
-            >
-                Sign In
-            </Button>
+            <div className="sign-in-btn">
+                <Button 
+                    variant="outlined"
+                    onClick={handleClickOpen}
+                >
+                    Sign In
+                </Button>
+            </div>
             <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Sign in</DialogTitle>
-            <DialogContent>
-            </DialogContent>
-                <form onSubmit={handleSignIn}>
-                    <TextField
-                        autoFocus
-                        margin="normal"
-                        id="username"
-                        label="Username"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        required
-                    />
-                    <TextField
-                        margin="normal"
-                        id="password"
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        variant="standard"
-                        required
-                    />
+                <DialogTitle>Sign in</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleSignIn}>
+                        <TextField
+                            autoFocus
+                            margin="normal"
+                            id="username"
+                            label="Username"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            required
+                        />
+                        <TextField
+                            margin="normal"
+                            id="password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            variant="standard"
+                            required
+                        />
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button type="submit">Sign In</Button>
                     </DialogActions>
-                </form>
+                    </form>
+                </DialogContent>
             </Dialog>
         </div>
     );

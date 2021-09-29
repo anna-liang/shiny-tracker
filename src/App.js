@@ -123,7 +123,7 @@ function App() {
 
   return (
     <div className="App">
-      <Login/>
+      {/* <Login/> */}
       <CounterHunts
         getPokemon={newHunt}
         setActiveTarget={setActiveTarget}

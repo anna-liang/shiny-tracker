@@ -22,7 +22,7 @@ export default function Hunts(props) {
         <div className="hunts">
             <div className="new-hunt-step-input">
                 <Button 
-                    id="new-hunt-btn"
+                    className="new-hunt-btn"
                     variant="outlined" 
                     onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}
                 >
@@ -44,7 +44,7 @@ export default function Hunts(props) {
                         if (index > 0) {
                             return (
                                 <div key={index} className="hunt">
-                                    <Divider/>
+                                    <Divider className={index == 1 ? "hidden" : "divider"}/>
                                     <ListItem disablePadding key={index}>
                                         <ListItemText 
                                             disableTypography

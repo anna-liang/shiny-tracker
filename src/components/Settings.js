@@ -156,7 +156,7 @@ export default function Settings(props) {
                     <div className="settings-btn">
                         <Button 
                             className="settings-btn"
-                            variant="outlined" 
+                            variant={props.hunt.active ? "contained" : "outlined"}
                             color="success" 
                             onClick={handleActivate}
                         >

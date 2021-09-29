@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import '../styles/Counter.css';
 
 export default function Counter(props) {
 
@@ -21,34 +22,43 @@ export default function Counter(props) {
     };
 
     return (
-        <div>
-            <img className="target-sprite" src={props.activeTargetImg} alt="Pokemon Sprite"/>
-            <div className="count">
-                {props.activeCounter}
+        <div className="counter">
+            <div className="img-count">
+                <img className={props.activeTargetImg == '' ? "hidden" : "target-sprite"} src={props.activeTargetImg} alt="Pokemon Sprite"/>
+                <div className="count">
+                    {props.activeCounter}
+                </div>
             </div>
-            <div className="counter-buttons">
-                <Button 
-                    variant="contained" 
-                    color="error" 
-                    onClick={handleCountClick("decrement")}
-                >
-                    -
-                </Button>
-                <Button 
-                    variant="contained" 
-                    color="success" 
-                    onClick={handleCountClick("increment")}
-                >
-                    +
-                </Button>
+            <div className="counter-reset-btns">
+                <div className="counter-btns">
+                    <Button 
+                        className="decrement-btn"
+                        variant="contained" 
+                        color="error" 
+                        onClick={handleCountClick("decrement")}
+                    >
+                        -
+                    </Button>
+                    <Button 
+                        className="decrement-btn"
+                        variant="contained" 
+                        color="success" 
+                        onClick={handleCountClick("increment")}
+                    >
+                        +
+                    </Button>
+                </div>
+                <div className="reset-btn">
+                    <Button 
+                        className="reset-btn"
+                        variant="outlined" 
+                        color="error" 
+                        onClick={handleCountClick("reset")}
+                    >
+                        Reset
+                    </Button>
+                </div>
             </div>
-            <Button 
-                variant="outlined" 
-                color="error" 
-                onClick={handleCountClick("reset")}
-            >
-                Reset
-            </Button>
         </div>
     )
 }
