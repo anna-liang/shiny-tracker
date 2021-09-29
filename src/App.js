@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import CounterHunts from './components/CounterHunts';
-import Login from './components/Login';
+import Header from './components/Header';
 
 function App() {
 
@@ -123,7 +123,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Login/> */}
+      <Header/>
       <CounterHunts
         getPokemon={newHunt}
         setActiveTarget={setActiveTarget}
