@@ -68,16 +68,14 @@ function App() {
         "phase": 0,
         "charm": false,
         "active": false,
-        // withCredentials: true 
       });
       let newHunts = [...hunts];
-      // newHunt = res.data;
       if (index === hunts.length)
         newHunts.push(res.data);
       else
         newHunts[index] = res.data;
-      if (index === activeIndex)
-        setActiveTargetImg(res.data.targetImg);
+      // if (index === activeIndex)
+      //   setActiveTargetImg(res.data.targetImg);
       setHunts(newHunts);
       console.log(res);
       console.log(res.headers);
@@ -93,7 +91,6 @@ function App() {
       const res = await axios.post(url, { 
         "target": activeTarget, 
         "count": activeCounter, 
-        // withCredentials: true 
       });
       console.log(res);
       console.log(res.headers);
@@ -110,7 +107,6 @@ function App() {
     setActiveCounter(hunt.count);
     setActiveIndex(index);
     console.log("set active target to ", hunt.target, hunt.active);
-    // console.log(newHunts);
   };
 
   const revertDefault = () => {

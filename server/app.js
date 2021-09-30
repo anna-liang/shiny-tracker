@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const app = express();
 app.use(bodyParser.json());
+const crypto = require('crypto');
 
 const cookie = require('cookie');
 
@@ -16,24 +17,18 @@ app.use(express.static('public'));
 const util = require('util');
 const TextEncoder = new util.TextEncoder();
 
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
 const uri = process.env.SHINY_TRACKER_MONGO_URI;
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect((err) => {
-    if (err)
-        throw err;
-    // console.log();
-    
-    // dbo.collection("testing").insertOne({ test:"test" }).then(() => {console.log("inserted")}).catch((err) => { if (err) throw err;});
-    // MongoClient.connect
-    console.log("MongoDB database connected successfully");
-    // client.close();
-});
+mongoose
+  .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+  .then((result) =>
+    console.log('MongoDB database connection established successfully')
+  )
+  .catch((err) => console.log(err));
 
-// let dbo = client.db('users');
-// dbo.collection("testing").insertOne({ test:"test" }).then(() => {console.log("inserted")}).catch((err) => { if (err) throw err;});
+const conn = mongoose.connection;
 
 const cors = require('cors');
 app.use(cors({
@@ -42,16 +37,17 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-// app.use(session({
-//     secret: 'pokemon',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         httpOnly: true,
-//         secure: true,
-//         sameSite: true
-//     }
-// }));
+const session = require('express-session');
+app.use(session({
+    secret: 'pokemon',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        secure: true,
+        sameSite: true
+    }
+}));
 
 var Hunt = (function() {
     let time = Date.now();
@@ -71,62 +67,61 @@ var Hunt = (function() {
 }());
 
 app.use(function (req, res, next){
-    // req.username = ('username' in req.session) ? req.session.username : '';
+    req.username = ('username' in req.session) ? req.session.username : '';
     console.log("HTTP request", req.method, req.url, req.body);
     next();
 });
 
 var isAuthenticated = function(req, res, next) {
-    // if (!req.username) return res.status(401).end("access denied");
+    console.log(req.session.username);
+    if (!req.session.username) return res.status(401).end("access denied");
     next();
 };
 
-
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
 app.post('/signup/', function (req, res, next) {
-    console.log("signed up");
+    // console.log("signed up");
     var username = req.body.username;
     var password = req.body.password;
     var salt = crypto.randomBytes(16).toString('base64');
     var hash = crypto.createHmac('sha512', salt);
     hash.update(password);
     var saltedHash = hash.digest('base64');
-    
-    // users.findOne({_id: username}, function(err, user){
-    //     if (err) return res.status(500).end(err);
-    //     if (user) return res.status(409).end("username " + username + " already exists");
-    //     users.update({_id: username},{_id: username, hash: saltedHash, salt: salt}, {upsert: true}, function(err){
-    //         if (err) return res.status(500).end(err);
-    //         // initialize cookie
-    //         res.setHeader('Set-Cookie', cookie.serialize('username', username, {
-    //               path : '/', 
-    //               maxAge: 60 * 60 * 24 * 7
-    //         }));
-    //         return res.json("User " + username + " signed up.");
-    //     });
-    // });
+    conn.collection('users').findOne({_id: username}, function(err, user) {
+        if (err) return res.status(500).end(err);
+        if (user) return res.status(409).end("Username " + username + " already exists");
+        conn.collection('users').insertOne({_id: username, hash: saltedHash, salt: salt}, function(err) {
+            if (err) return res.status(500).end(err);
+            req.session.username = username;
+            res.setHeader('Set-Cookie', cookie.serialize('username', username, {
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7
+            }));
+            return res.json("user " + username + " signed up");
+        });
+    })
 });
 
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
 app.post('/signin/', function (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
-    console.log("signed in", username, password);
-    // // retrieve user from the database
-    // users.findOne({_id: username}, function(err, user){
-    //     if (err) return res.status(500).end(err);
-    //     if (!user) return res.status(401).end("access denied");
-    //     var hash = crypto.createHmac('sha512', user.salt);
-    //     hash.update(password);
-    //     if (user.hash !== hash.digest('base64')) return res.status(401).end("access denied"); 
-    //     // req.session.username = username;
-    //     // initialize cookie
-    //     res.setHeader('Set-Cookie', cookie.serialize('username', username, {
-    //           path : '/', 
-    //           maxAge: 60 * 60 * 24 * 7
-    //     }));
-    //     return res.json("User " + username + " signed in.");
-    // });
+    // console.log("signed in", username, password);
+    conn.collection('users').findOne({_id: username}, function(err, user) {
+        if (err) return res.status(500).end(err);
+        if (!user) return res.status(401).end("access denied");
+        var hash = crypto.createHmac('sha512', user.salt);
+        hash.update(password);
+        if (user.hash !== hash.digest('base64')) return res.status(401).end("access denied");
+        req.session.username = username;
+        console.log(req.session.username);
+        res.setHeader('Set-Cookie', cookie.serialize('username', username, {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7
+        }));
+        console.log("signed in");
+        return res.json("user " + username + " signed in");
+    });
 });
 
 // New Hunt
@@ -171,12 +166,15 @@ app.post('/api/hunt/', function (req, res, next) {
 
 // curl -b cookie.txt -c cookie.txt localhost:3000/signout/
 app.get('/signout/', isAuthenticated, function (req, res, next) {
-    // req.session.destroy();
+    req.session.destroy(function(err) {
+        if (err) return res.status(500).end(err);
+    });
     res.setHeader('Set-Cookie', cookie.serialize('username', '', {
           path : '/', 
           maxAge: 60 * 60 * 24 * 7
     }));
-    res.redirect('/');
+    // res.redirect('/');
+    return res.json("user signed out");
 });
 
 // Update Hunt???? (can you update a hunt that's not a target?)
