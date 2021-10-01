@@ -33,7 +33,7 @@ const conn = mongoose.connection;
 const cors = require('cors');
 app.use(cors({
   origin:'http://localhost:3000',
-//   withCredentials: true,
+  credentials: true,
   optionsSuccessStatus: 200,
 }));
 
@@ -42,11 +42,11 @@ app.use(session({
     secret: 'pokemon',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        sameSite: true
-    }
+    // cookie: {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: true
+    // }
 }));
 
 var Hunt = (function() {
@@ -68,13 +68,13 @@ var Hunt = (function() {
 
 app.use(function (req, res, next){
     req.username = ('username' in req.session) ? req.session.username : '';
-    console.log("HTTP request", req.method, req.url, req.body);
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
 });
 
 var isAuthenticated = function(req, res, next) {
-    console.log(req.session.username);
-    if (!req.session.username) return res.status(401).end("access denied");
+    console.log(req.username);
+    if (!req.username) return res.status(401).end("Access denied");
     next();
 };
 
@@ -97,7 +97,7 @@ app.post('/signup/', function (req, res, next) {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7
             }));
-            return res.json("user " + username + " signed up");
+            return res.json("User " + username + " signed up");
         });
     })
 });
@@ -109,24 +109,22 @@ app.post('/signin/', function (req, res, next) {
     // console.log("signed in", username, password);
     conn.collection('users').findOne({_id: username}, function(err, user) {
         if (err) return res.status(500).end(err);
-        if (!user) return res.status(401).end("access denied");
+        if (!user) return res.status(401).end("Access denied");
         var hash = crypto.createHmac('sha512', user.salt);
         hash.update(password);
-        if (user.hash !== hash.digest('base64')) return res.status(401).end("access denied");
+        if (user.hash !== hash.digest('base64')) return res.status(401).end("Access denied");
         req.session.username = username;
-        console.log(req.session.username);
         res.setHeader('Set-Cookie', cookie.serialize('username', username, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
         }));
         console.log("signed in");
-        return res.json("user " + username + " signed in");
+        return res.json("User " + username + " signed in");
     });
 });
 
 // New Hunt
 app.post('/api/hunt/', function (req, res, next) {
-    // let hunt = new Hunt(req.target, req.count, req.gen, req.method, req.phase, req.charm, req.active);
     // !!! needs to be a list of hunts (pokemon name acts as id)
     var hunt = new Hunt(
         req.body.target,
@@ -165,7 +163,7 @@ app.post('/api/hunt/', function (req, res, next) {
 });
 
 // curl -b cookie.txt -c cookie.txt localhost:3000/signout/
-app.get('/signout/', isAuthenticated, function (req, res, next) {
+app.get('/signout/', function (req, res, next) {
     req.session.destroy(function(err) {
         if (err) return res.status(500).end(err);
     });
@@ -174,7 +172,8 @@ app.get('/signout/', isAuthenticated, function (req, res, next) {
           maxAge: 60 * 60 * 24 * 7
     }));
     // res.redirect('/');
-    return res.json("user signed out");
+    console.log("signed out");
+    return res.json("User signed out");
 });
 
 // Update Hunt???? (can you update a hunt that's not a target?)

@@ -1,4 +1,4 @@
-.sign-in-btn, .sign-up-btn {
+.sign-in-btn, .sign-up-btn, .sign-out-btn {
     float: right;
     margin-left: 10px;
 }

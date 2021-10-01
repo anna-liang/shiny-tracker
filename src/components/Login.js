@@ -42,12 +42,7 @@ export default function Login() {
             "password": password, 
           });
           console.log(res.status);
-          if (res.status === 200) {
-            //   console.log(signedIn);
-            //   await setSignedIn(true);
-              setSignedIn(true);
-              console.log(signedIn);
-          }
+          if (res.status === 200) setSignedIn(true);
         } catch (e) {
           console.log(e);
         }
@@ -64,10 +59,7 @@ export default function Login() {
             "password": password, 
           });
           console.log(res.status);
-          if (res.status === 200) {
-              setSignedIn(true);
-              console.log(signedIn);
-          }
+          if (res.status === 200) setSignedIn(true);
         } catch (e) {
           console.log(e);
         }
@@ -76,11 +68,8 @@ export default function Login() {
     const handleSignOut = async (e) => {
         try {
           const url = "http://localhost:3001/signout/";
-          const res = await axios.post(url);
-          if (res.status === 200) {
-              setSignedIn(false);
-              console.log(signedIn);
-          }
+          const res = await axios.get(url, {withCredentials: true});
+          if (res.status === 200) setSignedIn(false);
         } catch (e) {
           console.log(e);
         }
@@ -88,9 +77,8 @@ export default function Login() {
 
     return (
         <div>
-            <div className="sign-in-btn">
+            <div className={signedIn ? "hidden" : "sign-in-btn"}>
                 <Button 
-                    className={signedIn ? "hidden" : ""}
                     variant="outlined"
                     onClick={handleSignInOpen}
                 >
@@ -127,9 +115,8 @@ export default function Login() {
                     </form>
                 </DialogContent>
             </Dialog>
-            <div className="sign-up-btn">
+            <div className={signedIn ? "hidden" : "sign-up-btn"}>
                 <Button 
-                    className={signedIn ? "hidden" : ""}
                     variant="outlined"
                     onClick={handleSignUpOpen}
                 >
@@ -166,9 +153,9 @@ export default function Login() {
                     </form>
                 </DialogContent>
             </Dialog>
-            <div className="sign-out-btn">
+            <div className={signedIn ? "sign-out-btn" : "hidden"}>
                 <Button 
-                    className={signedIn ? "" : "hidden"}
+                    className="hidden"
                     variant="outlined"
                     onClick={handleSignOut}
                 >
