@@ -38,7 +38,7 @@ export default function CounterHunts(props) {
                     </TabPanel>
                     <TabPanel value="Hunts">
                         <Hunts
-                            getPokemon={props.getPokemon}
+                            newHunt={props.newHunt}
                             setActiveTarget={props.setActiveTarget}
                             activeCounter={props.activeCounter}
                             setActiveCounter={props.setActiveCounter}

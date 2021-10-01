@@ -24,7 +24,7 @@ export default function Hunts(props) {
                 <Button 
                     className="new-hunt-btn"
                     variant="outlined" 
-                    onClick={() => {props.getPokemon("pikachu", props.hunts.length)}}
+                    onClick={() => {props.newHunt("pikachu", props.hunts.length)}}
                 >
                     New Hunt
                 </Button>
@@ -50,7 +50,7 @@ export default function Hunts(props) {
                                             disableTypography
                                             primary={
                                                 <Settings 
-                                                    getPokemon={props.getPokemon}
+                                                    newHunt={props.newHunt}
                                                     setActiveTarget={props.setActiveTarget}
                                                     activeCounter={props.activeCounter}
                                                     setActiveCounter={props.setActiveCounter}

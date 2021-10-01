@@ -52,7 +52,7 @@ app.use(session({
 var Hunt = (function() {
     let time = Date.now();
     let date = new Date(time);
-    return function item(target, targetImg, count, gen, method, phase, charm, active) {
+    return function item(target, targetImg, count, gen, method, phase, charm, active, username) {
         this.id = uuidv4();
         this.target = target;
         this.targetImg = targetImg;
@@ -63,6 +63,7 @@ var Hunt = (function() {
         this.charm = charm;
         this.active = active;
         this.date = date;
+        this.user = username;
     };
 }());
 
@@ -134,32 +135,17 @@ app.post('/api/hunt/', function (req, res, next) {
         req.body.method,
         req.body.phase,
         req.body.charm,
-        req.body.active
-
+        req.body.active,
+        req.username
     );
     console.log("NEW HUNT:", hunt);
-    console.log(req.cookies);
-    if (req.cookies.hunts == undefined) {
-        console.log("no hunts");
-        res.setHeader('Set-Cookie', cookie.serialize('hunts', JSON.stringify([]), {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7
-        }));
-    }
-    else {
-        var newHunts = JSON.parse(req.cookies.hunts);
-        newHunts.push(hunt);
-        console.log(newHunts);
-        res.setHeader('Set-Cookie', cookie.serialize('hunts', newHunts, {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7
-        }));
-    }
+    conn.collection('hunts').insertOne({_id: hunt.id, target: hunt.target, targetImg: hunt.targetImg,
+        count: hunt.count, gen: hunt.gen, method: hunt.method, phase: hunt.phase, charm: hunt.charm, active: hunt.active,
+        date: hunt.date, user: hunt.user}, function(err) {
+        if (err) return res.status(500).end(err);
+        return res.json(hunt);
+    });
     // res.setHeader('Access-Control-Allow-Credentials', true);
-    console.log("cookies set");
-    // console.log(cookie);
-    // console.log(res.headers);
-    return res.json(hunt);
 });
 
 // curl -b cookie.txt -c cookie.txt localhost:3000/signout/
@@ -176,30 +162,18 @@ app.get('/signout/', function (req, res, next) {
     return res.json("User signed out");
 });
 
-// Update Hunt???? (can you update a hunt that's not a target?)
+// Update Hunt
 app.patch('/api/hunt/', function (req, res, next) {
-    var hunt = new Hunt(
-        req.body.target,
-        req.body.targetImg,
-        req.body.count,
-        req.body.gen,
-        req.body.method,
-        req.body.phase,
-        req.body.charm,
-        req.body.active
-    );
     console.log("PATCH HUNT:", hunt);
-    var newHunts = JSON.parse(req.cookies.hunts);
-    newHunts.push(hunt);
-    console.log(newHunts);
-    newHunts.map(function(h, index) {
-        if (h.id === req.body.id)
-            h = hunt
+    conn.collection('hunts').findOne({_id: req.body.id}, function(err, hunt) {
+        if (err) return res.status(500).end(err);
+        if (!hunt) return res.status(401).end("Access denied");
+        conn.collection('hunts').updateOne({_id: req.body.id}, {$set: {target: hunt.target, targetImg: hunt.targetImg,
+            count: hunt.count, gen: hunt.gen, method: hunt.method, phase: hunt.phase, charm: hunt.charm, active: hunt.active}}, function(err, result) {
+                if (err) return res.status(500).end(err);
+                return result.modifiedCount == 1 ? res.json("Hunt updated successfully") : res.status("Hunt not updated");
+            });
     });
-    // res.setHeader('Set-Cookie', cookie.serialize('hunts', newHunts, {
-    //     path: '/',
-    //     maxAge: 60 * 60 * 24 * 7
-    // }));
 });
 
 // // Update Target

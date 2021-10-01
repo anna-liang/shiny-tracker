@@ -16,7 +16,7 @@ export default function Settings(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         let target = e.target.elements[0].value.toLowerCase();
-        props.getPokemon(target, props.index);
+        props.newHunt(target, props.index);
         console.log("calling getPokemon:", target, props.index);
         if (props.hunt.active) {
             props.setActiveTarget(target);
@@ -69,9 +69,13 @@ export default function Settings(props) {
             </div>
             <div className="col1">
                 <form id="target-form" onSubmit={handleSubmit}>
-                    {/* <div className="target-input"> */}
                     <InputLabel>Pok&eacute;mon</InputLabel>
-                    <Autocomplete
+                    <TextField
+                        required
+                        className="settings-input"
+                        defaultValue={props.hunt.target}
+                    />
+                    {/* <Autocomplete
                         disablePortal
                         required
                         autoComplete
@@ -84,8 +88,7 @@ export default function Settings(props) {
                         // })}
                         options={['test']}
                         renderInput={(params) => <TextField {...params}/>}
-                    />
-                    {/* </div> */}
+                    /> */}
                 </form>
                 <div className="gen-input">
                     <InputLabel>Gen</InputLabel>

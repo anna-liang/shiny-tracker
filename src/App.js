@@ -121,7 +121,7 @@ function App() {
     <div className="App">
       <Header/>
       <CounterHunts
-        getPokemon={newHunt}
+        newHunt={newHunt}
         setActiveTarget={setActiveTarget}
         activePokemon={activePokemon}
         activeTargetImg={activeTargetImg}
