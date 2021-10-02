@@ -1,22 +1,44 @@
 import React from 'react';
+import axios from 'axios';
 import Button from '@mui/material/Button';
 import '../styles/Counter.css';
 
 export default function Counter(props) {
 
-    const handleCountClick = (action) => (e) => {
+    const handleCountClick = (action) => async (e) => {
         let newHunts = [...props.hunts];
+        let hunt = props.hunts[props.activeIndex];
+        let count = props.activeCounter;
         if (action === "increment") {
-            props.setActiveCounter(props.activeCounter + props.step);
+            count = props.activeCounter + props.step;
+            props.setActiveCounter(count);
             newHunts[props.activeIndex].count = props.activeCounter + props.step;
         }
         else if (action === "decrement") {
-            props.setActiveCounter(Math.max(props.activeCounter - props.step, 0));
+            count = Math.max(props.activeCounter - props.step, 0);
+            props.setActiveCounter(count);
             newHunts[props.activeIndex].count = Math.max(props.activeCounter - props.step, 0);
         }
         else if (action === "reset") {
-            props.setActiveCounter(0);
+            count = 0;
+            props.setActiveCounter(count);
             newHunts[props.activeIndex].count = 0;
+        }
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            await axios.patch(url, { 
+                "id": hunt.id,
+                "target": hunt.target, 
+                "targetImg": hunt.targetImg,
+                "count": count,
+                "gen": hunt.gen,
+                "method": hunt.method,
+                "phase": hunt.phase,
+                "charm": hunt.charm,
+                "active": hunt.active,
+            });
+        } catch (e) {
+            console.log(e);
         }
         props.setHunts(newHunts);
     };

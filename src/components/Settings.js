@@ -24,16 +24,115 @@ export default function Settings(props) {
         }
     };
 
+    const handleGenChange = async (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        let gen = e.target.value;
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            await axios.patch(url, { 
+                "id": props.hunt.id,
+                "target": props.hunt.target, 
+                "targetImg": props.hunt.targetImg,
+                "count": props.hunt.count,
+                "gen": gen,
+                "method": props.hunt.method,
+                "phase": props.hunt.phase,
+                "charm": props.hunt.charm,
+                "active": props.hunt.active,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        let newHunts = [...props.hunts];
+        newHunts[props.index].gen = gen;
+        props.setHunts(newHunts);
+    };
+
+    const handleMethodChange = async (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        let method = e.target.value;
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            await axios.patch(url, { 
+                "id": props.hunt.id,
+                "target": props.hunt.target, 
+                "targetImg": props.hunt.targetImg,
+                "count": props.hunt.count,
+                "gen": props.hunt.gen,
+                "method": method,
+                "phase": props.hunt.phase,
+                "charm": props.hunt.charm,
+                "active": props.hunt.active,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        let newHunts = [...props.hunts];
+        newHunts[props.index].method = method;
+        props.setHunts(newHunts);
+    };
+
+    const handlePhaseSubmit = async (e) => {
+        e.preventDefault();
+        console.log(e.target.elements[0].value);
+        let phase = e.target.elements[0].value;
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            await axios.patch(url, { 
+                "id": props.hunt.id,
+                "target": props.hunt.target, 
+                "targetImg": props.hunt.targetImg,
+                "count": props.hunt.count,
+                "gen": props.hunt.gen,
+                "method": props.hunt.method,
+                "phase": phase,
+                "charm": props.hunt.charm,
+                "active": props.hunt.active,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        let newHunts = [...props.hunts];
+        newHunts[props.index].phase = phase;
+        props.setHunts(newHunts);
+    };
+
+    const handleCharmChange = async (e) => {
+        console.log("click");
+        let charm = !props.hunt.charm;
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            const res = await axios.patch(url, { 
+                "id": props.hunt.id,
+                "target": props.hunt.target, 
+                "targetImg": props.hunt.targetImg,
+                "count": props.hunt.count,
+                "gen": props.hunt.gen,
+                "method": props.hunt.method,
+                "phase": props.hunt.phase,
+                "charm": charm,
+                "active": props.hunt.active,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        let newHunts = [...props.hunts];
+        newHunts[props.index].charm = charm;
+        props.setHunts(newHunts);
+    };
+
     const handleDelete = async (e) => {
         try {
             const url = "http://localhost:3001/api/hunt";
-            const res = await axios.delete(url, {
+            await axios.delete(url, {
               params: { 
                 id: props.hunt.id
               }
             });
         } catch (e) {
-        console.log(e);
+            console.log(e);
         }
         document.getElementById("target-form").reset();
         let newHunts = [...props.hunts];
@@ -43,17 +142,50 @@ export default function Settings(props) {
             props.revertDefault();
     };
 
-    const handleActivate = (e) => {
+    const handleActivate = async (e) => {
         let oldActiveState = props.hunt.active;
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            const res = await axios.patch(url, { 
+                "id": props.hunt.id,
+                "target": props.hunt.target, 
+                "targetImg": props.hunt.targetImg,
+                "count": props.hunt.count,
+                "gen": props.hunt.gen,
+                "method": props.hunt.method,
+                "phase": props.hunt.phase,
+                "charm": props.hunt.charm,
+                "active": !oldActiveState,
+            });
+        } catch (e) {
+            console.log(e);
+        }
         // if inactive to active
         if (!oldActiveState)
             props.activePokemon(props.hunt, props.index);
         else
             props.revertDefault();
         let newHunts = [...props.hunts];
-        newHunts.map((hunt) => {
-            if (hunt.active)
+        newHunts.map(async (hunt) => {
+            if (hunt.active) {
                 hunt.active = false;
+                try {
+                    const url = "http://localhost:3001/api/hunt";
+                    await axios.patch(url, { 
+                        "id": hunt.id,
+                        "target": hunt.target, 
+                        "targetImg": hunt.targetImg,
+                        "count": hunt.count,
+                        "gen": hunt.gen,
+                        "method": hunt.method,
+                        "phase": hunt.phase,
+                        "charm": hunt.charm,
+                        "active": false,
+                    });
+                } catch (e) {
+                    console.log(e);
+                }
+            }
         });
         newHunts[props.index].active = !oldActiveState;
         console.log(newHunts[props.index].target, "old state", oldActiveState, "new state", newHunts[props.index].active);
@@ -102,8 +234,9 @@ export default function Settings(props) {
                 <div className="gen-input">
                     <InputLabel>Gen</InputLabel>
                     <Select
+                        onChange={handleGenChange}
                         className="settings-input"
-                        defaultValue={props.hunt.gen}
+                        // value={props.hunt.gen}
                         label="Gen"
                     >
                         <MenuItem value={2}>2</MenuItem>
@@ -111,8 +244,8 @@ export default function Settings(props) {
                         <MenuItem value={4}>4</MenuItem>
                         <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={6}>6</MenuItem>
-                        <MenuItem value={6}>7</MenuItem>
-                        <MenuItem value={7}>8</MenuItem>
+                        <MenuItem value={7}>7</MenuItem>
+                        <MenuItem value={8}>8</MenuItem>
                     </Select>
                 </div>
             </div>
@@ -120,8 +253,9 @@ export default function Settings(props) {
                 <div className="method-input">
                     <InputLabel>Method</InputLabel>
                     <Select
+                        onChange={handleMethodChange}
                         className="settings-input"
-                        defaultValue={props.hunt.method}
+                        // value={props.hunt.method ? props.hunt.method : ""}
                         label="Method"
                     >
                         <MenuItem value={"full-odds"}>Full Odds</MenuItem>
@@ -135,21 +269,23 @@ export default function Settings(props) {
                         <MenuItem value={"sos"}>S.O.S</MenuItem>
                     </Select>
                 </div>
-                <div className="phase-input">
-                    <InputLabel>Phase</InputLabel>
-                    <TextField
-                        required
-                        className="settings-input"
-                        defaultValue={props.hunt.phase}
-                    />
-                </div>
+                <form id="phase-form" onSubmit={handlePhaseSubmit}>
+                    <div className="phase-input">
+                        <InputLabel>Phase</InputLabel>
+                        <TextField
+                            required
+                            className="settings-input"
+                            defaultValue={props.hunt.phase}
+                        />
+                    </div>
+                </form>
             </div>
             <div className="col3">
                 <div className="shiny-charm">
                     <FormControlLabel
                         className="settings-input"
                         value="Shiny Charm"
-                        control={<Checkbox />}
+                        control={<Checkbox onClick={handleCharmChange}/>}
                         label="Shiny Charm?"
                         labelPlacement="start"
                     />
