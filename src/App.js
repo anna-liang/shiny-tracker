@@ -25,25 +25,6 @@ function App() {
     try {
       const url = `https://pokeapi.co/api/v2/pokemon/${target}`;
       const res = await axios.get(url);
-      // let newHunts = [...hunts];
-      // let newHunt = {
-      //   target: target,
-      //   targetImg: res.data.sprites["front_shiny"],
-      //   count: 0,
-      //   gen: 2,
-      //   method: "full odds",
-      //   phase: 0,
-      //   charm: false,
-      //   active: false
-      // };
-      // if (index === hunts.length)
-      //   newHunts.push(newHunt);
-      // else
-      //   newHunts[index] = newHunt;
-      // if (index === activeIndex)
-      //   setActiveTargetImg(newHunt.targetImg);
-      // setHunts(newHunts);
-      // console.log(res);
       return res.data.sprites["front_shiny"];
     } catch (e) {
       // TODO:
@@ -84,16 +65,26 @@ function App() {
     }
   };
 
-  const updateHunt = async () => {
-    console.log(activeCounter);
+  const updateTarget = async (target, index) => {
+    let hunt = hunts[index];
+    let targetImg = await getPokemon(target);
     try {
       const url = "http://localhost:3001/api/hunt";
-      const res = await axios.post(url, { 
-        "target": activeTarget, 
-        "count": activeCounter, 
+      const res = await axios.patch(url, { 
+        "id": hunt.id,
+        "target": target, 
+        "targetImg": targetImg,
+        "count": hunt.count,
+        "gen": hunt.gen,
+        "method": hunt.method,
+        "phase": hunt.phase,
+        "charm": hunt.charm,
+        "active": hunt.active,
       });
-      console.log(res);
-      console.log(res.headers);
+      let newHunts = [...hunts];
+      newHunts[index].target = target;
+      newHunts[index].targetImg = targetImg;
+      setHunts(newHunts);
     } catch (e) {
       console.log(e);
     }
@@ -130,7 +121,7 @@ function App() {
         revertDefault={revertDefault}
         step={step}
         setStep={setStep}
-        updateHunt={updateHunt}
+        updateTarget={updateTarget}
         hunts={hunts}
         setHunts={setHunts}
         activeIndex={activeIndex}

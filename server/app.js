@@ -164,36 +164,33 @@ app.get('/signout/', function (req, res, next) {
 
 // Update Hunt
 app.patch('/api/hunt/', function (req, res, next) {
-    console.log("PATCH HUNT:", hunt);
+    console.log("PATCH HUNT:", req.body.id, req.body.target);
     conn.collection('hunts').findOne({_id: req.body.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
-        if (!hunt) return res.status(401).end("Access denied");
-        conn.collection('hunts').updateOne({_id: req.body.id}, {$set: {target: hunt.target, targetImg: hunt.targetImg,
-            count: hunt.count, gen: hunt.gen, method: hunt.method, phase: hunt.phase, charm: hunt.charm, active: hunt.active}}, function(err, result) {
+        if (!hunt) return res.status(404).end("Hunt #" + req.body.id + " does not exist");
+        conn.collection('hunts').updateOne({_id: req.body.id}, {$set: {"target": req.body.target, "targetImg": req.body.targetImg,
+            "count": req.body.count, "gen": req.body.gen, "method": req.body.method, "phase": req.body.phase, "charm": req.body.charm, "active": req.body.active}}, function(err, result) {
                 if (err) return res.status(500).end(err);
+                console.log("Matched", result.matchedCount, "Modified", result.modifiedCount);
                 return result.modifiedCount == 1 ? res.json("Hunt updated successfully") : res.status("Hunt not updated");
             });
     });
 });
 
-// // Update Target
-// app.patch('/api/target/', function (req, res, next) {
-
-// });
-
-// Delete Hunt (can be more than one)
+// Delete Hunt
 app.delete('/api/hunt/', function (req, res, next) {
-    var newHunts = JSON.parse(req.cookies.hunts);
-    newHunts.push(hunt);
-    console.log(newHunts);
-    for (var i = 0; i < newHunts.length; i++) {
-        if (newHunts[i].id == req.body.id)
-            newHunts.splice(i, 1);
-    }
-    // res.setHeader('Set-Cookie', cookie.serialize('hunts', newHunts, {
-    //     path: '/',
-    //     maxAge: 60 * 60 * 24 * 7
-    // }));
+    console.log(req.query.id);
+    conn.collection('hunts').findOne({_id: req.query.id}, function(err, hunt) {
+        if (err) return res.status(500).end(err);
+        // if (hunt.user !== req.username) return res.status(403).end("forbidden");
+        if (!hunt) return res.status(404).end("Hunt #" + req.query.id + " does not exist");
+        console.log(hunt);
+        conn.collection('hunts').deleteOne({_id: req.query.id}, function(err, result) {
+            if (err) return res.status(500).end(err);
+            console.log("Deleted", result.deletedCount);
+            return result.deletedCount == 1 ? res.json("Hunt deleted successfully") : res.status("Hunt not deleted");
+        });
+    });
 });
 
 

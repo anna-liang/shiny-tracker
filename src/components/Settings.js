@@ -13,23 +13,32 @@ import '../styles/Settings.css';
 
 export default function Settings(props) {
 
-    const handleSubmit = (e) => {
+    const handleTargetSubmit = (e) => {
         e.preventDefault();
         let target = e.target.elements[0].value.toLowerCase();
-        props.newHunt(target, props.index);
+        props.updateTarget(target, props.index);
         console.log("calling getPokemon:", target, props.index);
         if (props.hunt.active) {
             props.setActiveTarget(target);
             props.activePokemon(props.hunt, props.index);
         }
-        // props.updateHunt();
     };
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
+        try {
+            const url = "http://localhost:3001/api/hunt";
+            const res = await axios.delete(url, {
+              params: { 
+                id: props.hunt.id
+              }
+            });
+        } catch (e) {
+        console.log(e);
+        }
+        document.getElementById("target-form").reset();
         let newHunts = [...props.hunts];
         newHunts.splice(props.index, 1);
         props.setHunts(newHunts);
-        document.getElementById("target-form").reset();
         if (props.hunt.active)
             props.revertDefault();
     };
@@ -68,7 +77,7 @@ export default function Settings(props) {
                 <p>{props.hunt.count}</p>
             </div>
             <div className="col1">
-                <form id="target-form" onSubmit={handleSubmit}>
+                <form id="target-form" onSubmit={handleTargetSubmit}>
                     <InputLabel>Pok&eacute;mon</InputLabel>
                     <TextField
                         required

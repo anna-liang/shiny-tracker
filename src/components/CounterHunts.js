@@ -46,7 +46,7 @@ export default function CounterHunts(props) {
                             step={props.step}
                             setStep={props.setStep}
                             activeIndex={props.activeIndex}
-                            updateHunt={props.updateHunt}
+                            updateTarget={props.updateTarget}
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             activePokemon={props.activePokemon}

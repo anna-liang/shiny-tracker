@@ -56,7 +56,7 @@ export default function Hunts(props) {
                                                     setActiveCounter={props.setActiveCounter}
                                                     activeIndex={props.activeIndex}
                                                     revertDefault={props.revertDefault}
-                                                    updateHunt={props.updateHunt}
+                                                    updateTarget={props.updateTarget}
                                                     setHunts={props.setHunts}
                                                     index={index}
                                                     hunts={props.hunts}
