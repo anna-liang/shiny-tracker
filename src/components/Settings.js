@@ -29,9 +29,8 @@ export default function Settings(props) {
         console.log(e.target.value);
         let gen = e.target.value;
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             await axios.patch(url, { 
-                "id": props.hunt.id,
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -54,9 +53,8 @@ export default function Settings(props) {
         console.log(e.target.value);
         let method = e.target.value;
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             await axios.patch(url, { 
-                "id": props.hunt.id,
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -79,9 +77,8 @@ export default function Settings(props) {
         console.log(e.target.elements[0].value);
         let phase = e.target.elements[0].value;
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             await axios.patch(url, { 
-                "id": props.hunt.id,
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -103,9 +100,8 @@ export default function Settings(props) {
         console.log("click");
         let charm = !props.hunt.charm;
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             const res = await axios.patch(url, { 
-                "id": props.hunt.id,
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -125,12 +121,8 @@ export default function Settings(props) {
 
     const handleDelete = async (e) => {
         try {
-            const url = "http://localhost:3001/api/hunt";
-            await axios.delete(url, {
-              params: { 
-                id: props.hunt.id
-              }
-            });
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
+            await axios.delete(url);
         } catch (e) {
             console.log(e);
         }
@@ -145,9 +137,8 @@ export default function Settings(props) {
     const handleActivate = async (e) => {
         let oldActiveState = props.hunt.active;
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             const res = await axios.patch(url, { 
-                "id": props.hunt.id,
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -170,9 +161,8 @@ export default function Settings(props) {
             if (hunt.active) {
                 hunt.active = false;
                 try {
-                    const url = "http://localhost:3001/api/hunt";
+                    const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
                     await axios.patch(url, { 
-                        "id": hunt.id,
                         "target": hunt.target, 
                         "targetImg": hunt.targetImg,
                         "count": hunt.count,
@@ -236,6 +226,7 @@ export default function Settings(props) {
                     <Select
                         onChange={handleGenChange}
                         className="settings-input"
+                        defaultValue=""
                         // value={props.hunt.gen}
                         label="Gen"
                     >
@@ -255,6 +246,7 @@ export default function Settings(props) {
                     <Select
                         onChange={handleMethodChange}
                         className="settings-input"
+                        defaultValue=""
                         // value={props.hunt.method ? props.hunt.method : ""}
                         label="Method"
                     >

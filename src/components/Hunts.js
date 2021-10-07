@@ -37,6 +37,12 @@ export default function Hunts(props) {
                         />
                     </div>
                 </form>
+                <Button
+                    variant="outlined"
+                    onClick={() => {props.getHunts()}}
+                >
+                    get hunts
+                </Button>
             </div>
             <Box className="hunts-box">
                 <List>

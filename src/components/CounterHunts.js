@@ -50,6 +50,7 @@ export default function CounterHunts(props) {
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             activePokemon={props.activePokemon}
+                            getHunts={props.getHunts}
                         />
                     </TabPanel>
                 </TabContext>

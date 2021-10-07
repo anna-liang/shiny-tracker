@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CounterHunts from './components/CounterHunts';
 import Header from './components/Header';
@@ -67,11 +67,11 @@ function App() {
 
   const updateTarget = async (target, index) => {
     let hunt = hunts[index];
+    console.log(hunt);
     let targetImg = await getPokemon(target);
     try {
-      const url = "http://localhost:3001/api/hunt";
+      const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
       const res = await axios.patch(url, { 
-        "id": hunt.id,
         "target": target, 
         "targetImg": targetImg,
         "count": hunt.count,
@@ -106,7 +106,22 @@ function App() {
     setActiveCounter(0);
     setActiveIndex(0);
     console.log("reverting to default");
-  }
+  };
+
+  const getHunts = async () => {
+    try {
+      const url = "http://localhost:3001/api/hunt";
+      const res = await axios.get(url);
+      console.log(hunts);
+      let newHunts = [...hunts];
+      newHunts = res.data;
+      // console.log(res.data);
+      console.log(newHunts);
+      setHunts(newHunts);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className="App">
@@ -125,6 +140,7 @@ function App() {
         hunts={hunts}
         setHunts={setHunts}
         activeIndex={activeIndex}
+        getHunts={getHunts}
       />
     </div>
   );
