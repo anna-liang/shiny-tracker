@@ -145,7 +145,44 @@ app.post('/api/hunt/', function (req, res, next) {
         if (err) return res.status(500).end(err);
         return res.json(hunt);
     });
-    // res.setHeader('Access-Control-Allow-Credentials', true);
+});
+
+// Get all hunts of a user
+app.get('/api/hunt/', function(req, res, next) {
+    // conn.collection('user').findOne({_id: req.username}, function(err, user) {
+    //     if (err) return res.status(500).end(err);
+    //     if (!user) return res.status(404).end("User " + req.username + " does not exist");
+        // conn.collection('hunts').find({user: req.username}, function(err, hunts) {
+        conn.collection('hunts').find({}).toArray(function(err, hunts) {
+            if (err) return res.status(500).end(err);
+            // if (!hunts) return res.status(404).end("Hunts do not exist for user " + req.username);
+            if (!hunts) return res.status(404).end("No hunts found");
+            console.log(hunts);
+            return res.json(hunts);
+        });
+    });
+// });
+
+// Get hunt by id
+// app.get('/api/hunt/:id/', function(req, res, next) {
+//     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
+//         if (err) return res.status(500).end(err);
+//         if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
+//         return res.json(hunt);
+//     });
+// });
+
+// Get a user's active hunt
+app.get('/api/activeHunt/', function(req, res, next) {
+    conn.collection('user').findOne({_id: req.username}, function(err, user) {
+        if (err) return res.status(500).end(err);
+        if (!user) return res.status(404).end("User " + req.username + " does not exist");
+        conn.collection('hunts').findOne({active: true, user: req.username}, function(err, hunt) {
+            if (err) return res.status(500).end(err);
+            if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
+            return res.json(hunt);
+        });
+    });
 });
 
 // curl -b cookie.txt -c cookie.txt localhost:3000/signout/
@@ -163,12 +200,12 @@ app.get('/signout/', function (req, res, next) {
 });
 
 // Update Hunt
-app.patch('/api/hunt/', function (req, res, next) {
-    console.log("PATCH HUNT:", req.body.id, req.body.target);
-    conn.collection('hunts').findOne({_id: req.body.id}, function(err, hunt) {
+app.patch('/api/hunt/:id', function (req, res, next) {
+    console.log("PATCH HUNT:", req.params.id, req.body.target);
+    conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
-        if (!hunt) return res.status(404).end("Hunt #" + req.body.id + " does not exist");
-        conn.collection('hunts').updateOne({_id: req.body.id}, {$set: {"target": req.body.target, "targetImg": req.body.targetImg,
+        if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
+        conn.collection('hunts').updateOne({_id: req.params.id}, {$set: {"target": req.body.target, "targetImg": req.body.targetImg,
             "count": req.body.count, "gen": req.body.gen, "method": req.body.method, "phase": req.body.phase, "charm": req.body.charm, "active": req.body.active}}, function(err, result) {
                 if (err) return res.status(500).end(err);
                 console.log("Matched", result.matchedCount, "Modified", result.modifiedCount);
@@ -178,14 +215,14 @@ app.patch('/api/hunt/', function (req, res, next) {
 });
 
 // Delete Hunt
-app.delete('/api/hunt/', function (req, res, next) {
-    console.log(req.query.id);
-    conn.collection('hunts').findOne({_id: req.query.id}, function(err, hunt) {
+app.delete('/api/hunt/:id', function (req, res, next) {
+    console.log(req.params.id);
+    conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
         // if (hunt.user !== req.username) return res.status(403).end("forbidden");
-        if (!hunt) return res.status(404).end("Hunt #" + req.query.id + " does not exist");
+        if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
         console.log(hunt);
-        conn.collection('hunts').deleteOne({_id: req.query.id}, function(err, result) {
+        conn.collection('hunts').deleteOne({_id: req.params.id}, function(err, result) {
             if (err) return res.status(500).end(err);
             console.log("Deleted", result.deletedCount);
             return result.deletedCount == 1 ? res.json("Hunt deleted successfully") : res.status("Hunt not deleted");
