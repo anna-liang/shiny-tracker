@@ -2,12 +2,12 @@ const express = require('express');
 var bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const app = express();
+app.set('trust proxy', 1);
 app.use(bodyParser.json());
 const crypto = require('crypto');
 
 const cookie = require('cookie');
 
-// const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
@@ -15,7 +15,6 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 const util = require('util');
-const TextEncoder = new util.TextEncoder();
 
 const mongoose = require('mongoose');
 
@@ -42,11 +41,12 @@ app.use(session({
     secret: 'pokemon',
     resave: false,
     saveUninitialized: true,
-    // cookie: {
-    //     httpOnly: true,
-    //     secure: true,
-    //     sameSite: true
-    // }
+    cookie: {
+        maxAge: 24 * 60 * 60 * 7,
+        httpOnly: true,
+        secure: false,
+        // sameSite: true
+    }
 }));
 
 var Hunt = (function() {
@@ -74,14 +74,12 @@ app.use(function (req, res, next){
 });
 
 var isAuthenticated = function(req, res, next) {
-    console.log(req.username);
     if (!req.username) return res.status(401).end("Access denied");
     next();
 };
 
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
 app.post('/signup/', function (req, res, next) {
-    // console.log("signed up");
     var username = req.body.username;
     var password = req.body.password;
     var salt = crypto.randomBytes(16).toString('base64');
@@ -107,7 +105,7 @@ app.post('/signup/', function (req, res, next) {
 app.post('/signin/', function (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
-    // console.log("signed in", username, password);
+    console.log(username);
     conn.collection('users').findOne({_id: username}, function(err, user) {
         if (err) return res.status(500).end(err);
         if (!user) return res.status(401).end("Access denied");
@@ -115,6 +113,7 @@ app.post('/signin/', function (req, res, next) {
         hash.update(password);
         if (user.hash !== hash.digest('base64')) return res.status(401).end("Access denied");
         req.session.username = username;
+        console.log(req.session, username);
         res.setHeader('Set-Cookie', cookie.serialize('username', username, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
@@ -125,8 +124,8 @@ app.post('/signin/', function (req, res, next) {
 });
 
 // New Hunt
-app.post('/api/hunt/', function (req, res, next) {
-    // !!! needs to be a list of hunts (pokemon name acts as id)
+app.post('/api/hunt/', isAuthenticated, function (req, res, next) {
+    console.log(req.session);
     var hunt = new Hunt(
         req.body.target,
         req.body.targetImg,
@@ -148,20 +147,20 @@ app.post('/api/hunt/', function (req, res, next) {
 });
 
 // Get all hunts of a user
-app.get('/api/hunt/', function(req, res, next) {
-    // conn.collection('user').findOne({_id: req.username}, function(err, user) {
-    //     if (err) return res.status(500).end(err);
-    //     if (!user) return res.status(404).end("User " + req.username + " does not exist");
-        // conn.collection('hunts').find({user: req.username}, function(err, hunts) {
-        conn.collection('hunts').find({}).toArray(function(err, hunts) {
+app.get('/api/hunt/', isAuthenticated, function(req, res, next) {
+    conn.collection('users').findOne({_id: req.username}, function(err, user) {
+        if (err) return res.status(500).end(err);
+        if (!user) return res.status(404).end("User " + req.username + " does not exist");
+        console.log("found user");
+        conn.collection('hunts').find({user: req.username}).toArray(function(err, hunts) {
+            console.log("found hunts");
             if (err) return res.status(500).end(err);
-            // if (!hunts) return res.status(404).end("Hunts do not exist for user " + req.username);
-            if (!hunts) return res.status(404).end("No hunts found");
+            if (!hunts) return res.status(404).end("Hunts do not exist for user " + req.username);
             console.log(hunts);
             return res.json(hunts);
         });
     });
-// });
+});
 
 // Get hunt by id
 // app.get('/api/hunt/:id/', function(req, res, next) {
@@ -173,8 +172,8 @@ app.get('/api/hunt/', function(req, res, next) {
 // });
 
 // Get a user's active hunt
-app.get('/api/activeHunt/', function(req, res, next) {
-    conn.collection('user').findOne({_id: req.username}, function(err, user) {
+app.get('/api/activeHunt/', isAuthenticated, function(req, res, next) {
+    conn.collection('users').findOne({_id: req.username}, function(err, user) {
         if (err) return res.status(500).end(err);
         if (!user) return res.status(404).end("User " + req.username + " does not exist");
         conn.collection('hunts').findOne({active: true, user: req.username}, function(err, hunt) {
@@ -186,7 +185,7 @@ app.get('/api/activeHunt/', function(req, res, next) {
 });
 
 // curl -b cookie.txt -c cookie.txt localhost:3000/signout/
-app.get('/signout/', function (req, res, next) {
+app.get('/signout/', isAuthenticated, function (req, res, next) {
     req.session.destroy(function(err) {
         if (err) return res.status(500).end(err);
     });
@@ -194,13 +193,13 @@ app.get('/signout/', function (req, res, next) {
           path : '/', 
           maxAge: 60 * 60 * 24 * 7
     }));
-    // res.redirect('/');
+    res.redirect('/');
     console.log("signed out");
-    return res.json("User signed out");
+    return res.end("User signed out");
 });
 
 // Update Hunt
-app.patch('/api/hunt/:id', function (req, res, next) {
+app.patch('/api/hunt/:id', isAuthenticated, function (req, res, next) {
     console.log("PATCH HUNT:", req.params.id, req.body.target);
     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
@@ -215,11 +214,11 @@ app.patch('/api/hunt/:id', function (req, res, next) {
 });
 
 // Delete Hunt
-app.delete('/api/hunt/:id', function (req, res, next) {
-    console.log(req.params.id);
+app.delete('/api/hunt/:id', isAuthenticated, function (req, res, next) {
+    console.log("DELETE HUNT:", req.params.id);
     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
-        // if (hunt.user !== req.username) return res.status(403).end("forbidden");
+        if (hunt.user !== req.username) return res.status(403).end("forbidden");
         if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
         console.log(hunt);
         conn.collection('hunts').deleteOne({_id: req.params.id}, function(err, result) {
