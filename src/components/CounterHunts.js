@@ -20,8 +20,8 @@ export default function CounterHunts(props) {
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} centered>
-                            <Tab label="Counter" value="Counter"/>
-                            <Tab label="Hunts" value="Hunts"/>
+                            <Tab label="Counter" value="Counter" onClick={props.getActiveHunt}/>
+                            <Tab label="Hunts" value="Hunts" onClick={props.getHunts}/>
                         </Tabs>
                     </Box>
                     <TabPanel value="Counter">
@@ -34,6 +34,7 @@ export default function CounterHunts(props) {
                             activeIndex={props.activeIndex}
                             hunts={props.hunts}
                             setHunts={props.setHunts}
+                            getActiveHunt={props.getActiveHunt}
                         />
                     </TabPanel>
                     <TabPanel value="Hunts">
@@ -50,7 +51,6 @@ export default function CounterHunts(props) {
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             activePokemon={props.activePokemon}
-                            getHunts={props.getHunts}
                         />
                     </TabPanel>
                 </TabContext>

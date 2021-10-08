@@ -6,28 +6,28 @@ import '../styles/Counter.css';
 export default function Counter(props) {
 
     const handleCountClick = (action) => async (e) => {
-        let newHunts = [...props.hunts];
-        let hunt = props.hunts[props.activeIndex];
+        // let newHunts = [...props.hunts];
+        let hunt = await props.getActiveHunt();
+        console.log("hunt", hunt);
         let count = props.activeCounter;
         if (action === "increment") {
             count = props.activeCounter + props.step;
             props.setActiveCounter(count);
-            newHunts[props.activeIndex].count = props.activeCounter + props.step;
+            // newHunts[props.activeIndex].count = props.activeCounter + props.step;
         }
         else if (action === "decrement") {
             count = Math.max(props.activeCounter - props.step, 0);
             props.setActiveCounter(count);
-            newHunts[props.activeIndex].count = Math.max(props.activeCounter - props.step, 0);
+            // newHunts[props.activeIndex].count = Math.max(props.activeCounter - props.step, 0);
         }
         else if (action === "reset") {
             count = 0;
             props.setActiveCounter(count);
-            newHunts[props.activeIndex].count = 0;
+            // newHunts[props.activeIndex].count = 0;
         }
         try {
-            const url = "http://localhost:3001/api/hunt";
+            const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
             await axios.patch(url, { 
-                "id": hunt.id,
                 "target": hunt.target, 
                 "targetImg": hunt.targetImg,
                 "count": count,
@@ -36,11 +36,13 @@ export default function Counter(props) {
                 "phase": hunt.phase,
                 "charm": hunt.charm,
                 "active": hunt.active,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
         }
-        props.setHunts(newHunts);
+        // props.setHunts(newHunts);
     };
 
     return (

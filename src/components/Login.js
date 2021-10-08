@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import '../styles/Login.css';
 
-export default function Login() {
+export default function Login(props) {
     const [signedIn, setSignedIn] = React.useState(false);
     const [signInOpen, setSignInOpen] = React.useState(false);
     const [signUpOpen, setSignUpOpen] = React.useState(false);
@@ -40,8 +40,12 @@ export default function Login() {
           const res = await axios.post(url, { 
             "username": username, 
             "password": password, 
+          }, {
+            withCredentials: true,
           });
           console.log(res.status);
+          props.getHunts();
+          props.getActiveHunt();
           if (res.status === 200) setSignedIn(true);
         } catch (e) {
           console.log(e);
@@ -57,6 +61,8 @@ export default function Login() {
           const res = await axios.post(url, { 
             "username": username, 
             "password": password, 
+          }, {
+            withCredentials: true,
           });
           console.log(res.status);
           if (res.status === 200) setSignedIn(true);
@@ -68,7 +74,9 @@ export default function Login() {
     const handleSignOut = async (e) => {
         try {
           const url = "http://localhost:3001/signout/";
-          const res = await axios.get(url, {withCredentials: true});
+          const res = await axios.get(url, {
+              withCredentials: true
+          });
           if (res.status === 200) setSignedIn(false);
         } catch (e) {
           console.log(e);

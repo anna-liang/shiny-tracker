@@ -49,6 +49,8 @@ function App() {
         "phase": 0,
         "charm": false,
         "active": false,
+      }, {
+        withCredentials: true,
       });
       let newHunts = [...hunts];
       if (index === hunts.length)
@@ -80,6 +82,8 @@ function App() {
         "phase": hunt.phase,
         "charm": hunt.charm,
         "active": hunt.active,
+      }, {
+        withCredentials: true,
       });
       let newHunts = [...hunts];
       newHunts[index].target = target;
@@ -111,7 +115,9 @@ function App() {
   const getHunts = async () => {
     try {
       const url = "http://localhost:3001/api/hunt";
-      const res = await axios.get(url);
+      const res = await axios.get(url, {
+        withCredentials: true,
+      });
       console.log(hunts);
       let newHunts = [...hunts];
       newHunts = res.data;
@@ -123,9 +129,28 @@ function App() {
     }
   };
 
+  const getActiveHunt = async () => {
+    try {
+        const url = "http://localhost:3001/api/activeHunt";
+        const res = await axios.get(url, {
+          withCredentials: true,
+        });
+        let hunt = res.data;
+        console.log(hunt);
+        setActiveCounter(hunt.count);
+        setActiveTargetImg(hunt.targetImg);
+        return hunt;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
   return (
     <div className="App">
-      <Header/>
+      <Header
+        getHunts={getHunts}
+        getActiveHunt={getActiveHunt}
+      />
       <CounterHunts
         newHunt={newHunt}
         setActiveTarget={setActiveTarget}
@@ -141,6 +166,7 @@ function App() {
         setHunts={setHunts}
         activeIndex={activeIndex}
         getHunts={getHunts}
+        getActiveHunt={getActiveHunt}
       />
     </div>
   );
