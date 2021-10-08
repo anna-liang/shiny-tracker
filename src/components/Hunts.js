@@ -37,44 +37,36 @@ export default function Hunts(props) {
                         />
                     </div>
                 </form>
-                <Button
-                    variant="outlined"
-                    onClick={() => {props.getHunts()}}
-                >
-                    get hunts
-                </Button>
             </div>
             <Box className="hunts-box">
                 <List>
                     {props.hunts.map(function(hunt, index) {
-                        if (index > 0) {
-                            return (
-                                <div key={index} className="hunt">
-                                    <Divider className={index == 1 ? "hidden" : "divider"}/>
-                                    <ListItem disablePadding key={index}>
-                                        <ListItemText 
-                                            disableTypography
-                                            primary={
-                                                <Settings 
-                                                    newHunt={props.newHunt}
-                                                    setActiveTarget={props.setActiveTarget}
-                                                    activeCounter={props.activeCounter}
-                                                    setActiveCounter={props.setActiveCounter}
-                                                    activeIndex={props.activeIndex}
-                                                    revertDefault={props.revertDefault}
-                                                    updateTarget={props.updateTarget}
-                                                    setHunts={props.setHunts}
-                                                    index={index}
-                                                    hunts={props.hunts}
-                                                    hunt={hunt}
-                                                    activePokemon={props.activePokemon}
-                                                />
-                                            }
-                                        />
-                                    </ListItem>
-                                </div>
-                            );
-                        }
+                        return (
+                            <div key={index} className="hunt">
+                                <Divider className={index == 0 ? "hidden" : "divider"}/>
+                                <ListItem disablePadding key={index}>
+                                    <ListItemText 
+                                        disableTypography
+                                        primary={
+                                            <Settings 
+                                                newHunt={props.newHunt}
+                                                setActiveTarget={props.setActiveTarget}
+                                                activeCounter={props.activeCounter}
+                                                setActiveCounter={props.setActiveCounter}
+                                                activeIndex={props.activeIndex}
+                                                revertDefault={props.revertDefault}
+                                                updateTarget={props.updateTarget}
+                                                setHunts={props.setHunts}
+                                                index={index}
+                                                hunts={props.hunts}
+                                                hunt={hunt}
+                                                activePokemon={props.activePokemon}
+                                            />
+                                        }
+                                    />
+                                </ListItem>
+                            </div>
+                        );
                     })}
                 </List> 
             </Box>
