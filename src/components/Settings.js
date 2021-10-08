@@ -39,6 +39,8 @@ export default function Settings(props) {
                 "phase": props.hunt.phase,
                 "charm": props.hunt.charm,
                 "active": props.hunt.active,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
@@ -63,6 +65,8 @@ export default function Settings(props) {
                 "phase": props.hunt.phase,
                 "charm": props.hunt.charm,
                 "active": props.hunt.active,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
@@ -87,6 +91,8 @@ export default function Settings(props) {
                 "phase": phase,
                 "charm": props.hunt.charm,
                 "active": props.hunt.active,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
@@ -110,6 +116,8 @@ export default function Settings(props) {
                 "phase": props.hunt.phase,
                 "charm": charm,
                 "active": props.hunt.active,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
@@ -122,7 +130,9 @@ export default function Settings(props) {
     const handleDelete = async (e) => {
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.delete(url);
+            await axios.delete(url, {
+                withCredentials: true,
+            });
         } catch (e) {
             console.log(e);
         }
@@ -147,6 +157,8 @@ export default function Settings(props) {
                 "phase": props.hunt.phase,
                 "charm": props.hunt.charm,
                 "active": !oldActiveState,
+            }, {
+                withCredentials: true,
             });
         } catch (e) {
             console.log(e);
@@ -171,6 +183,8 @@ export default function Settings(props) {
                         "phase": hunt.phase,
                         "charm": hunt.charm,
                         "active": false,
+                    }, {
+                        withCredentials: true,
                     });
                 } catch (e) {
                     console.log(e);
