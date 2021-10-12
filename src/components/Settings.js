@@ -240,8 +240,7 @@ export default function Settings(props) {
                     <Select
                         onChange={handleGenChange}
                         className="settings-input"
-                        defaultValue=""
-                        // value={props.hunt.gen}
+                        value={props.hunt.gen ? props.hunt.gen : ""}
                         label="Gen"
                     >
                         <MenuItem value={2}>2</MenuItem>
@@ -260,8 +259,7 @@ export default function Settings(props) {
                     <Select
                         onChange={handleMethodChange}
                         className="settings-input"
-                        defaultValue=""
-                        // value={props.hunt.method ? props.hunt.method : ""}
+                        value={props.hunt.method ? props.hunt.method : ""}
                         label="Method"
                     >
                         <MenuItem value={"full-odds"}>Full Odds</MenuItem>
@@ -291,7 +289,7 @@ export default function Settings(props) {
                     <FormControlLabel
                         className="settings-input"
                         value="Shiny Charm"
-                        control={<Checkbox onClick={handleCharmChange}/>}
+                        control={<Checkbox onClick={handleCharmChange} checked={props.hunt.charm}/>}
                         label="Shiny Charm?"
                         labelPlacement="start"
                     />
