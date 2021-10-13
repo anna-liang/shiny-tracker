@@ -35,6 +35,8 @@ export default function CounterHunts(props) {
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             getActiveHunt={props.getActiveHunt}
+                            renderError={props.renderError}
+                            clearError={props.clearError}
                         />
                     </TabPanel>
                     <TabPanel value="Hunts">
@@ -51,6 +53,8 @@ export default function CounterHunts(props) {
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             activePokemon={props.activePokemon}
+                            renderError={props.renderError}
+                            clearError={props.clearError}
                         />
                     </TabPanel>
                 </TabContext>

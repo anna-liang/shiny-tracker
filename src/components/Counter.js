@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import '../styles/Counter.css';
+import '../styles/Main.css';
 
 export default function Counter(props) {
 
@@ -39,8 +40,9 @@ export default function Counter(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         // props.setHunts(newHunts);
     };
@@ -48,7 +50,7 @@ export default function Counter(props) {
     return (
         <div className="counter">
             <div className="img-count">
-                <img className={props.activeTargetImg == '' ? "hidden" : "target-sprite"} src={props.activeTargetImg} alt="Pokemon Sprite"/>
+                <img className={props.activeTargetImg === '' ? "hidden" : "target-sprite"} src={props.activeTargetImg} alt="Pokemon Sprite"/>
                 <div className="count">
                     {props.activeCounter}
                 </div>

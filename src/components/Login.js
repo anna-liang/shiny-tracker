@@ -5,9 +5,10 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
 import '../styles/Login.css';
+import '../styles/Main.css';
 
 export default function Login(props) {
     const [signedIn, setSignedIn] = React.useState(false);
@@ -47,11 +48,12 @@ export default function Login(props) {
           props.getHunts();
           props.getActiveHunt();
           if (res.status === 200) {
-              setSignedIn(true);
-              setSignInOpen(false);
+            setSignedIn(true);
+            setSignInOpen(false);
+            props.clearError();
           }
         } catch (e) {
-          console.log(e);
+            props.renderError(e);
         }
     };
 
@@ -69,11 +71,12 @@ export default function Login(props) {
           });
           console.log(res.status);
           if (res.status === 200) {
-              setSignedIn(true);
-              setSignUpOpen(false);
+            setSignedIn(true);
+            setSignUpOpen(false);
+            props.clearError();
           }
         } catch (e) {
-          console.log(e);
+            props.renderError(e);
         }
     };
 
@@ -85,7 +88,7 @@ export default function Login(props) {
           });
           if (res.status === 200) setSignedIn(false);
         } catch (e) {
-          console.log(e);
+            props.renderError(e);
         }
     };
 
@@ -100,6 +103,9 @@ export default function Login(props) {
                 </Button>
             </div>
             <Dialog open={signInOpen} onClose={handleSignInClose}>
+                <div className="error-container">
+                    <Alert severity="error" className="error-box"></Alert>
+                </div>
                 <DialogTitle>Sign in</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleSignIn}>
@@ -138,6 +144,9 @@ export default function Login(props) {
                 </Button>
             </div>
             <Dialog open={signUpOpen} onClose={handleSignUpClose}>
+                <div className="error-container">
+                    <Alert severity="error" className="error-box"></Alert>
+                </div>
                 <DialogTitle>Sign up</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleSignUp}>

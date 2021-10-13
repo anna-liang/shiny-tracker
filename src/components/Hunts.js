@@ -43,7 +43,7 @@ export default function Hunts(props) {
                     {props.hunts.map(function(hunt, index) {
                         return (
                             <div key={index} className="hunt">
-                                <Divider className={index == 0 ? "hidden" : "divider"}/>
+                                <Divider className={index === 0 ? "hidden" : "divider"}/>
                                 <ListItem disablePadding key={index}>
                                     <ListItemText 
                                         disableTypography
@@ -61,6 +61,8 @@ export default function Hunts(props) {
                                                 hunts={props.hunts}
                                                 hunt={hunt}
                                                 activePokemon={props.activePokemon}
+                                                renderError={props.renderError}
+                                                clearError={props.clearError}
                                             />
                                         }
                                     />

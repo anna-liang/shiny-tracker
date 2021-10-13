@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../styles/Settings.css';
+import '../styles/Main.css';
 
 export default function Settings(props) {
 
@@ -42,8 +43,9 @@ export default function Settings(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].gen = gen;
@@ -68,8 +70,9 @@ export default function Settings(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].method = method;
@@ -94,8 +97,9 @@ export default function Settings(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].phase = phase;
@@ -107,7 +111,7 @@ export default function Settings(props) {
         let charm = !props.hunt.charm;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            const res = await axios.patch(url, { 
+            await axios.patch(url, { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -119,8 +123,9 @@ export default function Settings(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].charm = charm;
@@ -133,8 +138,9 @@ export default function Settings(props) {
             await axios.delete(url, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         document.getElementById("target-form").reset();
         let newHunts = [...props.hunts];
@@ -148,7 +154,7 @@ export default function Settings(props) {
         let oldActiveState = props.hunt.active;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            const res = await axios.patch(url, { 
+            await axios.patch(url, { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -160,8 +166,9 @@ export default function Settings(props) {
             }, {
                 withCredentials: true,
             });
+            props.clearError();
         } catch (e) {
-            console.log(e);
+            props.renderError(e);
         }
         // if inactive to active
         if (!oldActiveState)
@@ -186,8 +193,9 @@ export default function Settings(props) {
                     }, {
                         withCredentials: true,
                     });
+                    props.clearError();
                 } catch (e) {
-                    console.log(e);
+                    props.renderError(e);
                 }
             }
         });

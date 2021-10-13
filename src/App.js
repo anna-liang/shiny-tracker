@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
 import CounterHunts from './components/CounterHunts';
 import Header from './components/Header';
+import '../styles/Main.css';
 
 function App() {
 
@@ -25,12 +27,13 @@ function App() {
     try {
       const url = `https://pokeapi.co/api/v2/pokemon/${target}`;
       const res = await axios.get(url);
+      clearError();
       return res.data.sprites["front_shiny"];
     } catch (e) {
       // TODO:
       // Handle error: 404
       // Invalid pokemon name entered -- no sprite
-      console.log(e);
+      renderError(e);
     }
   };
 
@@ -60,10 +63,11 @@ function App() {
       // if (index === activeIndex)
       //   setActiveTargetImg(res.data.targetImg);
       setHunts(newHunts);
+      clearError();
       console.log(res);
       console.log(res.headers);
     } catch (e) {
-      console.log(e);
+      renderError(e);
     }
   };
 
@@ -73,7 +77,7 @@ function App() {
     let targetImg = await getPokemon(target);
     try {
       const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-      const res = await axios.patch(url, { 
+      await axios.patch(url, { 
         "target": target, 
         "targetImg": targetImg,
         "count": hunt.count,
@@ -89,8 +93,9 @@ function App() {
       newHunts[index].target = target;
       newHunts[index].targetImg = targetImg;
       setHunts(newHunts);
+      clearError();
     } catch (e) {
-      console.log(e);
+      renderError(e);
     }
   };
 
@@ -124,8 +129,9 @@ function App() {
       // console.log(res.data);
       console.log(newHunts);
       setHunts(newHunts);
+      clearError();
     } catch (e) {
-      console.log(e);
+      renderError(e);
     }
   };
 
@@ -139,17 +145,39 @@ function App() {
         console.log(hunt);
         setActiveCounter(hunt.count);
         setActiveTargetImg(hunt.targetImg);
+        clearError();
         return hunt;
     } catch (e) {
-        console.log(e);
+        renderError(e);
     }
-};
+  };
+
+  const renderError = (e) => {
+    console.error(e);
+    var errorCont = document.querySelector(".error-container");
+    errorCont.style.display = 'block';
+    var errorBox = document.querySelector(".error-box");
+    errorBox.innerHTML = e;
+    errorBox.style.visibility = 'visible';
+  }
+
+  const clearError = () => {
+    var errorCont = document.querySelector(".error-container");
+    errorCont.style.display = 'none';
+    var errorBox = document.querySelector(".error-box");
+    errorBox.style.visibility = 'none';
+  }
 
   return (
     <div className="App">
+      <div className="error-container">
+          <Alert severity="error" className="error-box"></Alert>
+      </div>
       <Header
         getHunts={getHunts}
         getActiveHunt={getActiveHunt}
+        renderError={renderError}
+        clearError={clearError}
       />
       <CounterHunts
         newHunt={newHunt}
@@ -167,6 +195,8 @@ function App() {
         activeIndex={activeIndex}
         getHunts={getHunts}
         getActiveHunt={getActiveHunt}
+        renderError={renderError}
+        clearError={clearError}
       />
     </div>
   );

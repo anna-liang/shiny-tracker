@@ -1,0 +1,8 @@
+.error-box {
+    visibility: hidden;
+}
+
+.error-container {
+    display: none;
+    margin-bottom: 10px;
+}

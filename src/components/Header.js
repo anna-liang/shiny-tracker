@@ -9,6 +9,8 @@ export default function Header(props) {
             <Login
                 getActiveHunt={props.getActiveHunt}
                 getHunts={props.getHunts}
+                renderError={props.renderError}
+                clearError={props.clearError}
             />
         </div>
     );
