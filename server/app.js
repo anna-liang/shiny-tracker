@@ -193,8 +193,6 @@ app.get('/signout/', isAuthenticated, function (req, res, next) {
           path : '/', 
           maxAge: 60 * 60 * 24 * 7
     }));
-    res.redirect('/');
-    console.log("signed out");
     return res.end("User signed out");
 });
 

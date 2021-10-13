@@ -46,7 +46,10 @@ export default function Login(props) {
           console.log(res.status);
           props.getHunts();
           props.getActiveHunt();
-          if (res.status === 200) setSignedIn(true);
+          if (res.status === 200) {
+              setSignedIn(true);
+              setSignInOpen(false);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -65,7 +68,10 @@ export default function Login(props) {
             withCredentials: true,
           });
           console.log(res.status);
-          if (res.status === 200) setSignedIn(true);
+          if (res.status === 200) {
+              setSignedIn(true);
+              setSignUpOpen(false);
+          }
         } catch (e) {
           console.log(e);
         }
