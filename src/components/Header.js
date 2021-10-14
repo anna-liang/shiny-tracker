@@ -11,6 +11,7 @@ export default function Header(props) {
                 getHunts={props.getHunts}
                 renderError={props.renderError}
                 clearError={props.clearError}
+                getUsername={props.getUsername}
             />
         </div>
     );

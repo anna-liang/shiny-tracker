@@ -11,12 +11,12 @@ import '../styles/Login.css';
 import '../styles/Main.css';
 
 export default function Login(props) {
-    const [signedIn, setSignedIn] = React.useState(false);
+
+    const [signedIn, setSignedIn] = React.useState(props.getUsername() !== "");
     const [signInOpen, setSignInOpen] = React.useState(false);
     const [signUpOpen, setSignUpOpen] = React.useState(false);
 
     const handleSignInOpen = () => {
-
         setSignInOpen(true);
     };
 
@@ -47,7 +47,7 @@ export default function Login(props) {
           console.log(res.status);
           props.getHunts();
           props.getActiveHunt();
-          if (res.status === 200) {
+          if (props.getUsername() !== "") {
             setSignedIn(true);
             setSignInOpen(false);
             props.clearError();
@@ -70,7 +70,7 @@ export default function Login(props) {
             withCredentials: true,
           });
           console.log(res.status);
-          if (res.status === 200) {
+          if (props.getUsername() !== "") {
             setSignedIn(true);
             setSignUpOpen(false);
             props.clearError();
@@ -86,7 +86,10 @@ export default function Login(props) {
           const res = await axios.get(url, {
               withCredentials: true
           });
-          if (res.status === 200) setSignedIn(false);
+          if (res.status === 200) {
+              setSignedIn(false);
+              window.location.href = '/';
+          }
         } catch (e) {
             props.renderError(e);
         }

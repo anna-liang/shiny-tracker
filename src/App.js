@@ -3,7 +3,7 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CounterHunts from './components/CounterHunts';
 import Header from './components/Header';
-import '../styles/Main.css';
+import './styles/Main.css';
 
 function App() {
 
@@ -12,16 +12,11 @@ function App() {
   const [step, setStep] = useState(1);
   const [activeCounter, setActiveCounter] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hunts, setHunts] = useState([{
-    target: '',
-    targetImg: '',
-    count: 0,
-    gen: 2,
-    method: "full-odds",
-    phase: 0,
-    charm: false,
-    active: false
-  }]);
+  const [hunts, setHunts] = useState([]);
+
+  let getUsername = function(){
+    return document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  };
 
   const getPokemon = async (target) => {
     try {
@@ -118,6 +113,7 @@ function App() {
   };
 
   const getHunts = async () => {
+    console.log("called getHunts");
     try {
       const url = "http://localhost:3001/api/hunt";
       const res = await axios.get(url, {
@@ -178,26 +174,32 @@ function App() {
         getActiveHunt={getActiveHunt}
         renderError={renderError}
         clearError={clearError}
+        getUsername={getUsername}
       />
-      <CounterHunts
-        newHunt={newHunt}
-        setActiveTarget={setActiveTarget}
-        activePokemon={activePokemon}
-        activeTargetImg={activeTargetImg}
-        activeCounter={activeCounter}
-        setActiveCounter={setActiveCounter}
-        revertDefault={revertDefault}
-        step={step}
-        setStep={setStep}
-        updateTarget={updateTarget}
-        hunts={hunts}
-        setHunts={setHunts}
-        activeIndex={activeIndex}
-        getHunts={getHunts}
-        getActiveHunt={getActiveHunt}
-        renderError={renderError}
-        clearError={clearError}
-      />
+      {getUsername() ?
+        <CounterHunts
+          newHunt={newHunt}
+          setActiveTarget={setActiveTarget}
+          activePokemon={activePokemon}
+          activeTargetImg={activeTargetImg}
+          activeCounter={activeCounter}
+          setActiveCounter={setActiveCounter}
+          revertDefault={revertDefault}
+          step={step}
+          setStep={setStep}
+          updateTarget={updateTarget}
+          hunts={hunts}
+          setHunts={setHunts}
+          activeIndex={activeIndex}
+          getHunts={getHunts}
+          getActiveHunt={getActiveHunt}
+          renderError={renderError}
+          clearError={clearError}
+          getUsername={getUsername}
+        />
+        :
+        <h1>Welcome to Shiny Tracker!</h1>
+      }
     </div>
   );
 }
