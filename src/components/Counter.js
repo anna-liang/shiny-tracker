@@ -7,44 +7,40 @@ import '../styles/Main.css';
 export default function Counter(props) {
 
     const handleCountClick = (action) => async (e) => {
-        // let newHunts = [...props.hunts];
         let hunt = await props.getActiveHunt();
-        console.log("hunt", hunt);
         let count = props.activeCounter;
         if (action === "increment") {
             count = props.activeCounter + props.step;
-            props.setActiveCounter(count);
-            // newHunts[props.activeIndex].count = props.activeCounter + props.step;
+            if (hunt !== undefined) props.setActiveCounter(count);
         }
         else if (action === "decrement") {
             count = Math.max(props.activeCounter - props.step, 0);
-            props.setActiveCounter(count);
-            // newHunts[props.activeIndex].count = Math.max(props.activeCounter - props.step, 0);
+            if (hunt !== undefined) props.setActiveCounter(count);
         }
         else if (action === "reset") {
             count = 0;
-            props.setActiveCounter(count);
-            // newHunts[props.activeIndex].count = 0;
+            if (hunt !== undefined) props.setActiveCounter(count);
         }
-        try {
-            const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-            await axios.patch(url, { 
-                "target": hunt.target, 
-                "targetImg": hunt.targetImg,
-                "count": count,
-                "gen": hunt.gen,
-                "method": hunt.method,
-                "phase": hunt.phase,
-                "charm": hunt.charm,
-                "active": hunt.active,
-            }, {
-                withCredentials: true,
-            });
-            props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        if (hunt !== null && props.getUsername()) {
+            try {
+                const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
+                await axios.patch(url, { 
+                    "target": hunt.target, 
+                    "targetImg": hunt.targetImg,
+                    "count": count,
+                    "gen": hunt.gen,
+                    "method": hunt.method,
+                    "phase": hunt.phase,
+                    "charm": hunt.charm,
+                    "active": hunt.active,
+                }, {
+                    withCredentials: true,
+                });
+                props.clearError();
+            } catch (e) {
+                props.renderError(e);
+            }
         }
-        // props.setHunts(newHunts);
     };
 
     return (

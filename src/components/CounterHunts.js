@@ -37,6 +37,7 @@ export default function CounterHunts(props) {
                             getActiveHunt={props.getActiveHunt}
                             renderError={props.renderError}
                             clearError={props.clearError}
+                            getUsername={props.getUsername}
                         />
                     </TabPanel>
                     <TabPanel value="Hunts">
