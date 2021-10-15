@@ -70,6 +70,8 @@ export default function Login(props) {
             withCredentials: true,
           });
           console.log(res.status);
+          props.getHunts();
+          props.getActiveHunt();
           if (props.getUsername() !== "") {
             setSignedIn(true);
             setSignUpOpen(false);
