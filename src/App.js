@@ -134,21 +134,21 @@ function App() {
   };
 
   const getActiveHunt = async () => {
-    if (activeTargetImg !== '') {
-      try {
-          const url = "http://localhost:3001/api/activeHunt";
-          const res = await axios.get(url, {
-            withCredentials: true,
-          });
-          let hunt = res.data;
-          console.log(hunt);
+    try {
+        const url = "http://localhost:3001/api/activeHunt";
+        const res = await axios.get(url, {
+          withCredentials: true,
+        });
+        let hunt = res.data;
+        console.log(hunt);
+        if (hunt !== null) {
           setActiveCounter(hunt.count);
           setActiveTargetImg(hunt.targetImg);
           clearError();
+        }
           return hunt;
-      } catch (e) {
-          renderError(e);
-      }
+    } catch (e) {
+        renderError(e);
     }
   };
 

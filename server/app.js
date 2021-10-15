@@ -178,7 +178,7 @@ app.get('/api/activeHunt/', isAuthenticated, function(req, res, next) {
         if (!user) return res.status(404).end("User " + req.username + " does not exist");
         conn.collection('hunts').findOne({active: true, user: req.username}, function(err, hunt) {
             if (err) return res.status(500).end(err);
-            if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
+            if (!hunt) return res.json(null);
             return res.json(hunt);
         });
     });
