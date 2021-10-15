@@ -70,27 +70,29 @@ function App() {
     let hunt = hunts[index];
     console.log(hunt);
     let targetImg = await getPokemon(target);
-    try {
-      const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-      await axios.patch(url, { 
-        "target": target, 
-        "targetImg": targetImg,
-        "count": hunt.count,
-        "gen": hunt.gen,
-        "method": hunt.method,
-        "phase": hunt.phase,
-        "charm": hunt.charm,
-        "active": hunt.active,
-      }, {
-        withCredentials: true,
-      });
-      let newHunts = [...hunts];
-      newHunts[index].target = target;
-      newHunts[index].targetImg = targetImg;
-      setHunts(newHunts);
-      clearError();
-    } catch (e) {
-      renderError(e);
+    if (targetImg !== undefined) {
+      try {
+        const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
+        await axios.patch(url, { 
+          "target": target, 
+          "targetImg": targetImg,
+          "count": hunt.count,
+          "gen": hunt.gen,
+          "method": hunt.method,
+          "phase": hunt.phase,
+          "charm": hunt.charm,
+          "active": hunt.active,
+        }, {
+          withCredentials: true,
+        });
+        let newHunts = [...hunts];
+        newHunts[index].target = target;
+        newHunts[index].targetImg = targetImg;
+        setHunts(newHunts);
+        clearError();
+      } catch (e) {
+        renderError(e);
+      }
     }
   };
 
