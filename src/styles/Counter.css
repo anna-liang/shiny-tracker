@@ -12,6 +12,11 @@
     justify-content: center;
 }
 
+.active-count {
+    margin: 50px;
+    font-size: x-large;
+}
+
 .counter-btns {
     display: flex;
     justify-content: space-between;

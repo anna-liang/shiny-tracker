@@ -51,7 +51,7 @@ export default function Counter(props) {
         <div className="counter">
             <div className="img-count">
                 <img className={props.activeTargetImg === '' ? "hidden" : "target-sprite"} src={props.activeTargetImg} alt="Pokemon Sprite"/>
-                <div className="count">
+                <div className="active-count">
                     {props.activeCounter}
                 </div>
             </div>
