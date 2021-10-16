@@ -52,8 +52,8 @@ export default function Login(props) {
             setSignInOpen(false);
             props.clearError();
           }
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
     };
 
@@ -77,12 +77,13 @@ export default function Login(props) {
             setSignUpOpen(false);
             props.clearError();
           }
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            console.log(err);
+            props.renderError(err);
         }
     };
 
-    const handleSignOut = async (e) => {
+    const handleSignOut = async () => {
         try {
           const url = "http://localhost:3001/signout/";
           const res = await axios.get(url, {
@@ -92,8 +93,8 @@ export default function Login(props) {
               setSignedIn(false);
               window.location.href = '/';
           }
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
     };
 

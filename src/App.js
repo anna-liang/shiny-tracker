@@ -24,11 +24,11 @@ function App() {
       const res = await axios.get(url);
       clearError();
       return res.data.sprites["front_shiny"];
-    } catch (e) {
+    } catch (err) {
       // TODO:
       // Handle error: 404
       // Invalid pokemon name entered -- no sprite
-      renderError(e);
+      renderError(err);
     }
   };
 
@@ -61,8 +61,8 @@ function App() {
       clearError();
       console.log(res);
       console.log(res.headers);
-    } catch (e) {
-      renderError(e);
+    } catch (err) {
+      renderError(err);
     }
   };
 
@@ -90,8 +90,8 @@ function App() {
         newHunts[index].targetImg = targetImg;
         setHunts(newHunts);
         clearError();
-      } catch (e) {
-        renderError(e);
+      } catch (err) {
+        renderError(err);
       }
     }
   };
@@ -128,8 +128,8 @@ function App() {
       console.log(newHunts);
       setHunts(newHunts);
       clearError();
-    } catch (e) {
-      renderError(e);
+    } catch (err) {
+      renderError(err);
     }
   };
 
@@ -147,17 +147,17 @@ function App() {
           clearError();
         }
           return hunt;
-    } catch (e) {
-        renderError(e);
+    } catch (err) {
+        renderError(err);
     }
   };
 
-  const renderError = (e) => {
-    console.error(e);
+  const renderError = (err) => {
+    console.error(err);
     var errorCont = document.querySelector(".error-container");
     errorCont.style.display = 'block';
     var errorBox = document.querySelector(".error-box");
-    errorBox.innerHTML = e;
+    errorBox.innerHTML = err;
     errorBox.style.visibility = 'visible';
   }
 

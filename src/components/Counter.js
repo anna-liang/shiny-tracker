@@ -37,8 +37,8 @@ export default function Counter(props) {
                     withCredentials: true,
                 });
                 props.clearError();
-            } catch (e) {
-                props.renderError(e);
+            } catch (err) {
+                props.renderError(err);
             }
         }
     };

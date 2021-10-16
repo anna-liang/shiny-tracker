@@ -44,8 +44,8 @@ export default function Settings(props) {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].gen = gen;
@@ -71,8 +71,8 @@ export default function Settings(props) {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].method = method;
@@ -98,15 +98,15 @@ export default function Settings(props) {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].phase = phase;
         props.setHunts(newHunts);
     };
 
-    const handleCharmChange = async (e) => {
+    const handleCharmChange = async () => {
         console.log("click");
         let charm = !props.hunt.charm;
         try {
@@ -124,23 +124,23 @@ export default function Settings(props) {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].charm = charm;
         props.setHunts(newHunts);
     };
 
-    const handleDelete = async (e) => {
+    const handleDelete = async () => {
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
             await axios.delete(url, {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         document.getElementById("target-form").reset();
         let newHunts = [...props.hunts];
@@ -167,8 +167,8 @@ export default function Settings(props) {
                 withCredentials: true,
             });
             props.clearError();
-        } catch (e) {
-            props.renderError(e);
+        } catch (err) {
+            props.renderError(err);
         }
         // if inactive to active
         if (!oldActiveState)
@@ -194,8 +194,8 @@ export default function Settings(props) {
                         withCredentials: true,
                     });
                     props.clearError();
-                } catch (e) {
-                    props.renderError(e);
+                } catch (err) {
+                    props.renderError(err);
                 }
             }
         });
