@@ -105,7 +105,6 @@ app.post('/signup/', function (req, res, next) {
 app.post('/signin/', function (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
-    console.log(username);
     conn.collection('users').findOne({_id: username}, function(err, user) {
         if (err) return res.status(500).end(err);
         if (!user) return res.status(401).end("Access denied");
@@ -113,19 +112,16 @@ app.post('/signin/', function (req, res, next) {
         hash.update(password);
         if (user.hash !== hash.digest('base64')) return res.status(401).end("Access denied");
         req.session.username = username;
-        console.log(req.session, username);
         res.setHeader('Set-Cookie', cookie.serialize('username', username, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
         }));
-        console.log("signed in");
         return res.json("User " + username + " signed in");
     });
 });
 
 // New Hunt
 app.post('/api/hunt/', isAuthenticated, function (req, res, next) {
-    console.log(req.session);
     var hunt = new Hunt(
         req.body.target,
         req.body.targetImg,
@@ -137,7 +133,6 @@ app.post('/api/hunt/', isAuthenticated, function (req, res, next) {
         req.body.active,
         req.username
     );
-    console.log("NEW HUNT:", hunt);
     conn.collection('hunts').insertOne({_id: hunt.id, target: hunt.target, targetImg: hunt.targetImg,
         count: hunt.count, gen: hunt.gen, method: hunt.method, phase: hunt.phase, charm: hunt.charm, active: hunt.active,
         date: hunt.date, user: hunt.user}, function(err) {
@@ -151,12 +146,9 @@ app.get('/api/hunt/', isAuthenticated, function(req, res, next) {
     conn.collection('users').findOne({_id: req.username}, function(err, user) {
         if (err) return res.status(500).end(err);
         if (!user) return res.status(404).end("User " + req.username + " does not exist");
-        console.log("found user");
         conn.collection('hunts').find({user: req.username}).toArray(function(err, hunts) {
-            console.log("found hunts");
             if (err) return res.status(500).end(err);
             if (!hunts) return res.status(404).end("Hunts do not exist for user " + req.username);
-            console.log(hunts);
             return res.json(hunts);
         });
     });
@@ -198,14 +190,12 @@ app.get('/signout/', isAuthenticated, function (req, res, next) {
 
 // Update Hunt
 app.patch('/api/hunt/:id', isAuthenticated, function (req, res, next) {
-    console.log("PATCH HUNT:", req.params.id, req.body.target);
     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
         if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
         conn.collection('hunts').updateOne({_id: req.params.id}, {$set: {"target": req.body.target, "targetImg": req.body.targetImg,
             "count": req.body.count, "gen": req.body.gen, "method": req.body.method, "phase": req.body.phase, "charm": req.body.charm, "active": req.body.active}}, function(err, result) {
                 if (err) return res.status(500).end(err);
-                console.log("Matched", result.matchedCount, "Modified", result.modifiedCount);
                 return result.modifiedCount == 1 ? res.json("Hunt updated successfully") : res.status("Hunt not updated");
             });
     });
@@ -213,15 +203,12 @@ app.patch('/api/hunt/:id', isAuthenticated, function (req, res, next) {
 
 // Delete Hunt
 app.delete('/api/hunt/:id', isAuthenticated, function (req, res, next) {
-    console.log("DELETE HUNT:", req.params.id);
     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
         if (err) return res.status(500).end(err);
         if (hunt.user !== req.username) return res.status(403).end("forbidden");
         if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
-        console.log(hunt);
         conn.collection('hunts').deleteOne({_id: req.params.id}, function(err, result) {
             if (err) return res.status(500).end(err);
-            console.log("Deleted", result.deletedCount);
             return result.deletedCount == 1 ? res.json("Hunt deleted successfully") : res.status("Hunt not deleted");
         });
     });
