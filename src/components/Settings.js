@@ -14,20 +14,46 @@ import '../styles/Main.css';
 
 export default function Settings(props) {
 
+    const updateTarget = async (target, index) => {
+        let hunt = props.hunts[index];
+        let targetImg = await props.getPokemon(target);
+        if (targetImg !== undefined) {
+          try {
+            const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
+            await axios.patch(url, { 
+              "target": target, 
+              "targetImg": targetImg,
+              "count": hunt.count,
+              "gen": hunt.gen,
+              "method": hunt.method,
+              "phase": hunt.phase,
+              "charm": hunt.charm,
+              "active": hunt.active,
+            }, {
+              withCredentials: true,
+            });
+            let newHunts = [...props.hunts];
+            newHunts[index].target = target;
+            newHunts[index].targetImg = targetImg;
+            props.setHunts(newHunts);
+            props.clearError();
+          } catch (err) {
+            props.renderError(err);
+          }
+        }
+      };
+
     const handleTargetSubmit = (e) => {
         e.preventDefault();
         let target = e.target.elements[0].value.toLowerCase();
-        props.updateTarget(target, props.index);
-        console.log("calling getPokemon:", target, props.index);
+        updateTarget(target, props.index);
         if (props.hunt.active) {
-            props.setActiveTarget(target);
-            props.activePokemon(props.hunt, props.index);
+            props.activePokemon(props.hunt);
         }
     };
 
     const handleGenChange = async (e) => {
         e.preventDefault();
-        console.log(e.target.value);
         let gen = e.target.value;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
@@ -54,7 +80,6 @@ export default function Settings(props) {
 
     const handleMethodChange = async (e) => {
         e.preventDefault();
-        console.log(e.target.value);
         let method = e.target.value;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
@@ -81,7 +106,6 @@ export default function Settings(props) {
 
     const handlePhaseSubmit = async (e) => {
         e.preventDefault();
-        console.log(e.target.elements[0].value);
         let phase = e.target.elements[0].value;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
@@ -107,7 +131,6 @@ export default function Settings(props) {
     };
 
     const handleCharmChange = async () => {
-        console.log("click");
         let charm = !props.hunt.charm;
         try {
             const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
@@ -172,7 +195,7 @@ export default function Settings(props) {
         }
         // if inactive to active
         if (!oldActiveState)
-            props.activePokemon(props.hunt, props.index);
+            props.activePokemon(props.hunt);
         else
             props.revertDefault();
         let newHunts = [...props.hunts];
@@ -200,17 +223,12 @@ export default function Settings(props) {
             }
         });
         newHunts[props.index].active = !oldActiveState;
-        console.log(newHunts[props.index].target, "old state", oldActiveState, "new state", newHunts[props.index].active);
         props.setHunts(newHunts);
     };
 
     const getAllPokemon = async () => {
         const url = `https://pokeapi.co/api/v2/pokemon-species?limit=1`;
         const res = await axios.get(url);
-        console.log("getting all pokemon");
-        console.log(res.data.results);
-        // console.log(typeof([]));
-        // let result = [res.data.results[0]]
         return Object.entries(res.data.results);
     };
 

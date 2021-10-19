@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Counter from './Counter';
 import Hunts from './Hunts';
 import Box from '@mui/material/Box';
@@ -8,7 +8,8 @@ import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 
 export default function CounterHunts(props) {
-    const [value, setValue] = React.useState('Counter');
+    const [value, setValue] = useState('Counter');
+    const [step, setStep] = useState(1);
 
     const handleChange = (e, newValue) => {
         setValue(newValue);
@@ -29,11 +30,7 @@ export default function CounterHunts(props) {
                             activeTargetImg={props.activeTargetImg}
                             activeCounter={props.activeCounter}
                             setActiveCounter={props.setActiveCounter}
-                            step={props.step}
-                            setStep={props.setStep}
-                            activeIndex={props.activeIndex}
-                            hunts={props.hunts}
-                            setHunts={props.setHunts}
+                            step={step}
                             getActiveHunt={props.getActiveHunt}
                             renderError={props.renderError}
                             clearError={props.clearError}
@@ -42,15 +39,10 @@ export default function CounterHunts(props) {
                     </TabPanel>
                     <TabPanel value="Hunts">
                         <Hunts
-                            newHunt={props.newHunt}
-                            setActiveTarget={props.setActiveTarget}
-                            activeCounter={props.activeCounter}
-                            setActiveCounter={props.setActiveCounter}
+                            getPokemon={props.getPokemon}
                             revertDefault={props.revertDefault}
-                            step={props.step}
-                            setStep={props.setStep}
-                            activeIndex={props.activeIndex}
-                            updateTarget={props.updateTarget}
+                            step={step}
+                            setStep={setStep}
                             hunts={props.hunts}
                             setHunts={props.setHunts}
                             activePokemon={props.activePokemon}

@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Settings from './Settings';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -14,8 +15,35 @@ export default function Hunts(props) {
 
     const handleStep = (e) => {
         e.preventDefault();
-        console.log("setting step to", e.target.elements[0].value);
         props.setStep(parseInt(e.target.elements[0].value));
+    };
+
+    const newHunt = async (target, index) => {
+        let targetImg = await props.getPokemon(target);
+        try {
+          const url = "http://localhost:3001/api/hunt";
+          const res = await axios.post(url, { 
+            "target": target, 
+            "targetImg": targetImg,
+            "count": 0,
+            "gen": 2,
+            "method": "full-odds",
+            "phase": 0,
+            "charm": false,
+            "active": false,
+          }, {
+            withCredentials: true,
+          });
+          let newHunts = [...props.hunts];
+          if (index === props.hunts.length)
+            newHunts.push(res.data);
+          else
+            newHunts[index] = res.data;
+          props.setHunts(newHunts);
+          props.clearError();
+        } catch (err) {
+          props.renderError(err);
+        }
     };
 
     return (
@@ -24,7 +52,7 @@ export default function Hunts(props) {
                 <Button 
                     className="new-hunt-btn"
                     variant="outlined" 
-                    onClick={() => {props.newHunt("pikachu", props.hunts.length)}}
+                    onClick={() => {newHunt("pikachu", props.hunts.length)}}
                 >
                     New Hunt
                 </Button>
@@ -49,13 +77,8 @@ export default function Hunts(props) {
                                         disableTypography
                                         primary={
                                             <Settings 
-                                                newHunt={props.newHunt}
-                                                setActiveTarget={props.setActiveTarget}
-                                                activeCounter={props.activeCounter}
-                                                setActiveCounter={props.setActiveCounter}
-                                                activeIndex={props.activeIndex}
+                                                getPokemon={props.getPokemon}
                                                 revertDefault={props.revertDefault}
-                                                updateTarget={props.updateTarget}
                                                 setHunts={props.setHunts}
                                                 index={index}
                                                 hunts={props.hunts}
