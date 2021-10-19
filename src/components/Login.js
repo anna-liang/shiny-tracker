@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,9 +12,9 @@ import '../styles/Main.css';
 
 export default function Login(props) {
 
-    const [signedIn, setSignedIn] = React.useState(props.getUsername() !== "");
-    const [signInOpen, setSignInOpen] = React.useState(false);
-    const [signUpOpen, setSignUpOpen] = React.useState(false);
+    const [signedIn, setSignedIn] = useState(props.getUsername() !== "");
+    const [signInOpen, setSignInOpen] = useState(false);
+    const [signUpOpen, setSignUpOpen] = useState(false);
 
     const handleSignInOpen = () => {
         setSignInOpen(true);
@@ -38,7 +38,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
           const url = "http://localhost:3001/signin/";
-          const res = await axios.post(url, { 
+          await axios.post(url, { 
             "username": username, 
             "password": password, 
           }, {
@@ -62,7 +62,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
           const url = "http://localhost:3001/signup/";
-          const res = await axios.post(url, { 
+          await axios.post(url, { 
             "username": username, 
             "password": password, 
           }, {
