@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CounterHunts from './components/CounterHunts';
@@ -7,7 +7,7 @@ import './styles/Main.css';
 
 function App() {
 
-  const [activeTarget, setActiveTarget] = useState("pikachu");
+  // const [activeTarget, setActiveTarget] = useState("pikachu");
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [step, setStep] = useState(1);
   const [activeCounter, setActiveCounter] = useState(0);
@@ -98,7 +98,7 @@ function App() {
 
   const activePokemon = (hunt, index) => {
     console.log(hunt, index);
-    setActiveTarget(hunt.target);
+    // setActiveTarget(hunt.target);
     setActiveTargetImg(hunt.targetImg);
     console.log(hunt.count);
     setActiveCounter(hunt.count);
@@ -107,7 +107,7 @@ function App() {
   };
 
   const revertDefault = () => {
-    setActiveTarget('');
+    // setActiveTarget('');
     setActiveTargetImg('');
     setActiveCounter(0);
     setActiveIndex(0);
@@ -144,6 +144,7 @@ function App() {
         if (hunt !== null) {
           setActiveCounter(hunt.count);
           setActiveTargetImg(hunt.targetImg);
+          console.log("called getActiveHunt", hunt.targetImg);
           clearError();
         }
           return hunt;
@@ -168,6 +169,10 @@ function App() {
     errorBox.style.visibility = 'none';
   }
 
+  useEffect(() => {
+    getActiveHunt();
+  });
+
   return (
     <div className="App">
       <div className="error-container">
@@ -183,7 +188,7 @@ function App() {
       {getUsername() ?
         <CounterHunts
           newHunt={newHunt}
-          setActiveTarget={setActiveTarget}
+          // setActiveTarget={setActiveTarget}
           activePokemon={activePokemon}
           activeTargetImg={activeTargetImg}
           activeCounter={activeCounter}
