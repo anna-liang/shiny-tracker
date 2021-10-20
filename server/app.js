@@ -14,15 +14,13 @@ app.use(cookieParser());
 
 app.use(express.static('public'));
 
-const util = require('util');
-
 const mongoose = require('mongoose');
 
 const uri = process.env.SHINY_TRACKER_MONGO_URI;
 
 mongoose
   .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-  .then((result) =>
+  .then(() =>
     console.log('MongoDB database connection established successfully')
   )
   .catch((err) => console.log(err));
@@ -74,7 +72,6 @@ app.use(function (req, res, next){
 });
 
 var isAuthenticated = function(req, res, next) {
-    console.log(req.session);
     if (!req.username) return res.status(401).end("Access denied");
     next();
 };
