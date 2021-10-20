@@ -39,6 +39,7 @@ export default function Hunts(props) {
             newHunts.push(res.data);
           else
             newHunts[index] = res.data;
+          props.getHunts();
           props.setHunts(newHunts);
           props.clearError();
         } catch (err) {
