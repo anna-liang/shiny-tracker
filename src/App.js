@@ -3,6 +3,8 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CounterHunts from './components/CounterHunts';
 import Header from './components/Header';
+import SparkleTitle from './components/SparkleTitle';
+import Title from './components/Title';
 import './styles/Main.css';
 
 function App() {
@@ -10,6 +12,7 @@ function App() {
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
   let getUsername = function(){
     return document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -86,7 +89,8 @@ function App() {
   }
 
   useEffect(() => {
-    getActiveHunt();
+    if (getUsername()) getActiveHunt();
+    clearError();
   });
 
   return (
@@ -101,6 +105,15 @@ function App() {
         clearError={clearError}
         getUsername={getUsername}
       />
+      {!getUsername() ?
+      <SparkleTitle
+        loaded={loaded}
+        setLoaded={setLoaded}
+        getUsername={getUsername}
+      />
+      :
+      null
+      }
       {getUsername() ?
         <CounterHunts
           getPokemon={getPokemon}
@@ -118,7 +131,7 @@ function App() {
           getUsername={getUsername}
         />
         :
-        <h1>Welcome to Shiny Tracker!</h1>
+        <Title/>
       }
     </div>
   );
