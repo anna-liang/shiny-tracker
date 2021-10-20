@@ -74,6 +74,7 @@ app.use(function (req, res, next){
 });
 
 var isAuthenticated = function(req, res, next) {
+    console.log(req.session);
     if (!req.username) return res.status(401).end("Access denied");
     next();
 };
@@ -153,15 +154,6 @@ app.get('/api/hunt/', isAuthenticated, function(req, res, next) {
         });
     });
 });
-
-// Get hunt by id
-// app.get('/api/hunt/:id/', function(req, res, next) {
-//     conn.collection('hunts').findOne({_id: req.params.id}, function(err, hunt) {
-//         if (err) return res.status(500).end(err);
-//         if (!hunt) return res.status(404).end("Hunt #" + req.params.id + " does not exist");
-//         return res.json(hunt);
-//     });
-// });
 
 // Get a user's active hunt
 app.get('/api/activeHunt/', isAuthenticated, function(req, res, next) {
