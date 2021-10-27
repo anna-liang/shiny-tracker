@@ -1,0 +1,36 @@
+.hidden {
+    display: none;
+}
+
+.counter {
+    display: flex;
+    flex-direction: column;
+}
+
+.img-count {
+    display: flex;
+    justify-content: center;
+}
+
+.active-count {
+    margin: 50px;
+    font-size: x-large;
+}
+
+.counter-btns {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    width: 500px;
+}
+
+.increment-btn, .decrement-btn {
+    width: 245px;
+}
+
+.reset-btn {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
