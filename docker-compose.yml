@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  server:
+    restart: always
+    build: server/
+    command: node app.js
+    ports:
+      - '80:3001'
+  client:
+    build: client/
+    command: npm start
+    network_mode: host
+    depends_on:
+      - server
