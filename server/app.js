@@ -16,7 +16,23 @@ app.use(express.static('public'));
 
 const mongoose = require('mongoose');
 
-const uri = process.env.SHINY_TRACKER_MONGO_URI;
+// const fs = require('fs');
+
+// try {
+//     const uri = fs.readFileSync('../run/secrets/db_uri.txt', 'utf8');
+//     mongoose
+//     .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+//     .then(() =>
+//         console.log('MongoDB database connection established successfully')
+//     )
+//     .catch((err) => console.log(err));
+// } catch (err) {
+//     console.log(err);
+// }
+
+const uri = "mongodb+srv://anna:ZzBDRCrpvbJtmzXW@shiny-tracker.pryly.mongodb.net/shinyTracker?retryWrites=true&w=majority";
+
+// const uri = process.env.SHINY_TRACKER_MONGO_URI;
 
 mongoose
   .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -205,7 +221,6 @@ app.delete('/api/hunt/:id', isAuthenticated, function (req, res, next) {
 
 
 const http = require('http');
-const { cloneElement } = require('react');
 const PORT = 3001;
 http.createServer(app).listen(PORT, function(err) {
     if (err) console.log(err);
