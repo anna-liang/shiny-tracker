@@ -1,4 +1,8 @@
-version: '3'
+version: '3.1'
+
+# secrets:
+#   db_uri:
+#     file: run/secrets/db_uri.txt
 
 services:
   server:
@@ -7,9 +11,19 @@ services:
     command: node app.js
     ports:
       - '80:3001'
+    # secrets:
+    #   - db_uri
   client:
     build: client/
     command: npm start
     network_mode: host
     depends_on:
       - server
+  reverse:
+    hostname: reverse
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./etc/nginx
