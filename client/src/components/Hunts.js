@@ -13,8 +13,6 @@ import '../styles/Hunts.css';
 
 export default function Hunts(props) {
 
-    const apiUrl = "http://localhost/";
-
     const handleStep = (e) => {
         e.preventDefault();
         props.setStep(parseInt(e.target.elements[0].value));
@@ -24,7 +22,7 @@ export default function Hunts(props) {
         let targetImg = await props.getPokemon(target);
         try {
         //   const url = "http://localhost:3001/api/hunt";
-          const res = await axios.post(apiUrl + "api/hunt", { 
+          const res = await axios.post(props.apiUrl + "api/hunt", { 
             "target": target, 
             "targetImg": targetImg,
             "count": 0,
@@ -89,6 +87,7 @@ export default function Hunts(props) {
                                                 activePokemon={props.activePokemon}
                                                 renderError={props.renderError}
                                                 clearError={props.clearError}
+                                                apiUrl={props.apiUrl}
                                             />
                                         }
                                     />

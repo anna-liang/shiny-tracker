@@ -35,6 +35,7 @@ export default function CounterHunts(props) {
                             renderError={props.renderError}
                             clearError={props.clearError}
                             getUsername={props.getUsername}
+                            apiUrl={props.apiUrl}
                         />
                     </TabPanel>
                     <TabPanel value="Hunts">
@@ -49,6 +50,7 @@ export default function CounterHunts(props) {
                             activePokemon={props.activePokemon}
                             renderError={props.renderError}
                             clearError={props.clearError}
+                            apiUrl={props.apiUrl}
                         />
                     </TabPanel>
                 </TabContext>

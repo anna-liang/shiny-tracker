@@ -105,6 +105,7 @@ function App() {
         renderError={renderError}
         clearError={clearError}
         getUsername={getUsername}
+        apiUrl={apiUrl}
       />
       {!getUsername() ?
       <SparkleTitle
@@ -130,6 +131,7 @@ function App() {
           renderError={renderError}
           clearError={clearError}
           getUsername={getUsername}
+          apiUrl={apiUrl}
         />
         :
         <Title/>

@@ -6,8 +6,6 @@ import '../styles/Main.css';
 
 export default function Counter(props) {
 
-    const apiUrl = "http://localhost/";
-
     const handleCountClick = (action) => async (e) => {
         let hunt = await props.getActiveHunt();
         let count = props.activeCounter;
@@ -26,7 +24,7 @@ export default function Counter(props) {
         if (hunt !== null && props.getUsername()) {
             try {
                 // const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-                await axios.patch(apiUrl + "api/hunt/" + hunt._id + "/", { 
+                await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
                     "target": hunt.target, 
                     "targetImg": hunt.targetImg,
                     "count": count,

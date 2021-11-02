@@ -14,15 +14,13 @@ import '../styles/Main.css';
 
 export default function Settings(props) {
 
-    const apiUrl = "http://localhost/";
-
     const updateTarget = async (target, index) => {
         let hunt = props.hunts[index];
         let targetImg = await props.getPokemon(target);
         if (targetImg !== undefined) {
           try {
             // const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
               "target": target, 
               "targetImg": targetImg,
               "count": hunt.count,
@@ -59,7 +57,7 @@ export default function Settings(props) {
         let gen = e.target.value;
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + props.hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + props.hunt._id + "/", { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -85,7 +83,7 @@ export default function Settings(props) {
         let method = e.target.value;
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + props.hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + props.hunt._id + "/", { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -111,7 +109,7 @@ export default function Settings(props) {
         let phase = e.target.elements[0].value;
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + props.hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + props.hunt._id + "/", { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -136,7 +134,7 @@ export default function Settings(props) {
         let charm = !props.hunt.charm;
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + props.hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + props.hunt._id + "/", { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -160,7 +158,7 @@ export default function Settings(props) {
     const handleDelete = async () => {
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.delete(apiUrl + "api/hunt/" + props.hunt._id + "/", {
+            await axios.delete(props.apiUrl + "api/hunt/" + props.hunt._id + "/", {
                 withCredentials: true,
             });
             props.clearError();
@@ -179,7 +177,7 @@ export default function Settings(props) {
         let oldActiveState = props.hunt.active;
         try {
             // const url = "http://localhost:3001/api/hunt/" + props.hunt._id + "/";
-            await axios.patch(apiUrl + "api/hunt/" + props.hunt._id + "/", { 
+            await axios.patch(props.apiUrl + "api/hunt/" + props.hunt._id + "/", { 
                 "target": props.hunt.target, 
                 "targetImg": props.hunt.targetImg,
                 "count": props.hunt.count,
@@ -206,7 +204,7 @@ export default function Settings(props) {
                 hunt.active = false;
                 try {
                     // const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
-                    await axios.patch(apiUrl + "api/hunt/" + hunt._id + "/", { 
+                    await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
                         "target": hunt.target, 
                         "targetImg": hunt.targetImg,
                         "count": hunt.count,

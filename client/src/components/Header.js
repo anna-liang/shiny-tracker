@@ -12,6 +12,7 @@ export default function Header(props) {
                 renderError={props.renderError}
                 clearError={props.clearError}
                 getUsername={props.getUsername}
+                apiUrl={props.apiUrl}
             />
         </div>
     );

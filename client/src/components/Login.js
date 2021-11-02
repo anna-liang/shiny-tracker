@@ -12,7 +12,6 @@ import '../styles/Main.css';
 
 export default function Login(props) {
 
-    const apiUrl = "http://localhost/"
     const [signedIn, setSignedIn] = useState(props.getUsername() !== "");
     const [signInOpen, setSignInOpen] = useState(false);
     const [signUpOpen, setSignUpOpen] = useState(false);
@@ -39,7 +38,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
         //   const url = "http://localhost:3001/signin/";
-          await axios.post(apiUrl + "signin/", { 
+          await axios.post(props.apiUrl + "signin/", { 
             "username": username, 
             "password": password, 
           }, {
@@ -63,7 +62,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
         //   const url = "http://localhost:3001/signup/";
-          await axios.post(apiUrl + "signup/", { 
+          await axios.post(props.apiUrl + "signup/", { 
             "username": username, 
             "password": password, 
           }, {
@@ -84,7 +83,7 @@ export default function Login(props) {
     const handleSignOut = async () => {
         try {
         //   const url = "http://localhost:3001/signout/";
-          const res = await axios.get(apiUrl + "signout/", {
+          const res = await axios.get(props.apiUrl + "signout/", {
               withCredentials: true
           });
           if (res.status === 200) {
