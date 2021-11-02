@@ -19,11 +19,3 @@ services:
     network_mode: host
     depends_on:
       - server
-  reverse:
-    hostname: reverse
-    image: nginx
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./etc/nginx
