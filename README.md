@@ -2,7 +2,9 @@
 
 A shiny hunt counter and tracker for trainers.
 
-![shiny tracker gif](https://raw.githubusercontent.com/anna-liang/shiny-tracker/main/src/media/demo.gif?token=AJJH5RHMYKUKIN326PVXGG3BPDFNS)
+![shiny tracker gif](https://raw.githubusercontent.com/anna-liang/shiny-tracker/main/client/src/media/demo.gif?token=AJJH5RCJSLXEHNI6OV6X5I3BRHTJ2)
+
+Try out the live version [here](http://159.203.27.72)!
 
 ## Features
 - A counter for any currently active hunt
@@ -11,17 +13,17 @@ A shiny hunt counter and tracker for trainers.
 - Trainers can set their custom step counter
 
 ## Installation
-1. Have Node.js and npm installed
-2. Install dependencies
+1. Have Docker installed
+2. Build and run the app with docker-compose!
 ```bash
-npm install
+docker-compose up -d
 ```
-2. Start the front-end
-```bash
-npm run start
-```
-2. Start the back-end
-```bash
-cd server
-node app.js
-```
+3. Navigate over to http://localhost:3000/
+
+## Usage
+- Sign up as a new user or login with an existing account
+- The Counter tab will display your active hunt
+- The Hunts tab will display a list of all of your hunts
+- To add a new hunt, simply click the New Hunt button at the stop of the Hunts tab
+- From there, you can edit the information pertaining to your hunt
+- Only one hunt can be set as the active hunt from the Hunts tab
