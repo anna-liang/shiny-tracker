@@ -9,7 +9,7 @@ import './styles/Main.css';
 
 function App() {
 
-  const apiUrl = "http://localhost/";
+  const apiUrl = "http://localhost:3001/";
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
