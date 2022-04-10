@@ -10,7 +10,7 @@ services:
     build: server/
     command: node app.js
     ports:
-      - '3001:3001'
+      - '80:3001'
     # secrets:
     #   - db_uri
   client:
