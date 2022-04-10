@@ -7,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Autocomplete from '@mui/material/Autocomplete';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../styles/Settings.css';
 import '../styles/Main.css';
@@ -226,12 +225,6 @@ export default function Settings(props) {
         props.setHunts(newHunts);
     };
 
-    const getAllPokemon = async () => {
-        const url = `https://pokeapi.co/api/v2/pokemon-species?limit=1`;
-        const res = await axios.get(url);
-        return Object.entries(res.data.results);
-    };
-
     return (
         <div className="settings">
             <img className="target-sprite" src={props.hunt.targetImg} alt="Pokemon Sprite"/>
@@ -246,20 +239,6 @@ export default function Settings(props) {
                         className="settings-input"
                         defaultValue={props.hunt.target}
                     />
-                    {/* <Autocomplete
-                        disablePortal
-                        required
-                        autoComplete
-                        className="settings-input"
-                        // sx={{ width: 200 }}
-                        defaultValue={props.hunt.target}
-                        // options={getAllPokemon().then((res) => {
-                        //     console.log("results", Object.entries(res)[0]);
-                        //     return Object.entries(res)[0];
-                        // })}
-                        options={['test']}
-                        renderInput={(params) => <TextField {...params}/>}
-                    /> */}
                 </form>
                 <div className="gen-input">
                     <InputLabel>Gen</InputLabel>
