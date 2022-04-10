@@ -16,23 +16,7 @@ app.use(express.static('public'));
 
 const mongoose = require('mongoose');
 
-// const fs = require('fs');
-
-// try {
-//     const uri = fs.readFileSync('../run/secrets/db_uri.txt', 'utf8');
-//     mongoose
-//     .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-//     .then(() =>
-//         console.log('MongoDB database connection established successfully')
-//     )
-//     .catch((err) => console.log(err));
-// } catch (err) {
-//     console.log(err);
-// }
-
 const uri = "mongodb+srv://anna:ZzBDRCrpvbJtmzXW@shiny-tracker.pryly.mongodb.net/shinyTracker?retryWrites=true&w=majority";
-
-// const uri = process.env.SHINY_TRACKER_MONGO_URI;
 
 mongoose
   .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -45,7 +29,8 @@ const conn = mongoose.connection;
 
 const cors = require('cors');
 app.use(cors({
-  origin:'http://localhost:3000',
+//   origin:'http://localhost:3000',
+  origin: 'https://shinytracker.herokuapp.com',
   credentials: true,
   optionsSuccessStatus: 200,
 }));
@@ -56,10 +41,11 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 24 * 60 * 60 * 7,
+        maxAge: 99999999,
         httpOnly: true,
-        secure: false,
-        // sameSite: true
+        // secure: false,
+        secure: true,
+        sameSite: "none"
     }
 }));
 
@@ -106,11 +92,7 @@ app.post('/signup/', function (req, res, next) {
         conn.collection('users').insertOne({_id: username, hash: saltedHash, salt: salt}, function(err) {
             if (err) return res.status(500).end(err);
             req.session.username = username;
-            res.setHeader('Set-Cookie', cookie.serialize('username', username, {
-                path: '/',
-                maxAge: 60 * 60 * 24 * 7
-            }));
-            return res.json("User " + username + " signed up");
+            return res.json({"username": username});
         });
     })
 });
@@ -126,11 +108,7 @@ app.post('/signin/', function (req, res, next) {
         hash.update(password);
         if (user.hash !== hash.digest('base64')) return res.status(401).end("Access denied");
         req.session.username = username;
-        res.setHeader('Set-Cookie', cookie.serialize('username', username, {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7
-        }));
-        return res.json("User " + username + " signed in");
+        return res.json({"username": username});
     });
 });
 
@@ -186,11 +164,11 @@ app.get('/signout/', isAuthenticated, function (req, res, next) {
     req.session.destroy(function(err) {
         if (err) return res.status(500).end(err);
     });
-    res.setHeader('Set-Cookie', cookie.serialize('username', '', {
-          path : '/', 
-          maxAge: 60 * 60 * 24 * 7
-    }));
-    return res.end("User signed out");
+    // res.setHeader('Set-Cookie', cookie.serialize('username', '', {
+    //       path : '/', 
+    //       maxAge: 99999999,
+    // }));
+    return res.json({"username": ""});
 });
 
 // Update Hunt
@@ -221,7 +199,7 @@ app.delete('/api/hunt/:id', isAuthenticated, function (req, res, next) {
 
 
 const http = require('http');
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 http.createServer(app).listen(PORT, function(err) {
     if (err) console.log(err);
     else console.log("HTTP server on http://localhost:%s", PORT);
