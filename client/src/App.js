@@ -9,14 +9,16 @@ import './styles/Main.css';
 
 function App() {
 
-  const apiUrl = "http://localhost:3001/";
+  const apiUrl = "https://shinytrackerserver.herokuapp.com/";
+  // const apiUrl = "http://localhost:3001/";
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [username, setUsername] = useState("");
 
-  let getUsername = function(){
-    return document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  let handleUsername = function(username){
+    setUsername(username);
   };
 
   const getPokemon = async (target) => {
@@ -90,7 +92,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (getUsername()) getActiveHunt();
+    if (username) getActiveHunt();
     clearError();
   });
 
@@ -104,19 +106,20 @@ function App() {
         getActiveHunt={getActiveHunt}
         renderError={renderError}
         clearError={clearError}
-        getUsername={getUsername}
+        username={username}
+        handleUsername={handleUsername}
         apiUrl={apiUrl}
       />
-      {!getUsername() ?
+      {!username ?
       <SparkleTitle
         loaded={loaded}
         setLoaded={setLoaded}
-        getUsername={getUsername}
+        username={username}
       />
       :
       null
       }
-      {getUsername() ?
+      {username ?
         <CounterHunts
           getPokemon={getPokemon}
           activePokemon={activePokemon}
@@ -130,7 +133,7 @@ function App() {
           getActiveHunt={getActiveHunt}
           renderError={renderError}
           clearError={clearError}
-          getUsername={getUsername}
+          username={username}
           apiUrl={apiUrl}
         />
         :

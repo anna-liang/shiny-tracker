@@ -12,7 +12,7 @@ import '../styles/Main.css';
 
 export default function Login(props) {
 
-    const [signedIn, setSignedIn] = useState(props.getUsername() !== "");
+    const [signedIn, setSignedIn] = useState(props.username !== "");
     const [signInOpen, setSignInOpen] = useState(false);
     const [signUpOpen, setSignUpOpen] = useState(false);
 
@@ -38,7 +38,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
         //   const url = "http://localhost:3001/signin/";
-          await axios.post(props.apiUrl + "signin/", { 
+          const res = await axios.post(props.apiUrl + "signin/", { 
             "username": username, 
             "password": password, 
           }, {
@@ -46,9 +46,10 @@ export default function Login(props) {
           });
           props.getHunts();
           props.getActiveHunt();
-          if (props.getUsername() !== "") {
+          if (res.data.username !== "") {
             setSignedIn(true);
             setSignInOpen(false);
+            props.handleUsername(res.data.username);
             props.clearError();
           }
         } catch (err) {
@@ -62,7 +63,7 @@ export default function Login(props) {
         let password = e.target.elements[1].value.toLowerCase();
         try {
         //   const url = "http://localhost:3001/signup/";
-          await axios.post(props.apiUrl + "signup/", { 
+          const res = await axios.post(props.apiUrl + "signup/", { 
             "username": username, 
             "password": password, 
           }, {
@@ -70,9 +71,10 @@ export default function Login(props) {
           });
           props.getHunts();
           props.getActiveHunt();
-          if (props.getUsername() !== "") {
+          if (res.data.username !== "") {
             setSignedIn(true);
             setSignUpOpen(false);
+            props.handleUsername(res.data.username);
             props.clearError();
           }
         } catch (err) {
@@ -88,6 +90,7 @@ export default function Login(props) {
           });
           if (res.status === 200) {
               setSignedIn(false);
+              props.handleUsername(res.data.username);
               window.location.href = '/';
           }
         } catch (err) {

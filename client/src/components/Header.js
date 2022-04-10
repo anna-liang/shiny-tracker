@@ -11,7 +11,8 @@ export default function Header(props) {
                 getActiveHunt={props.getActiveHunt}
                 renderError={props.renderError}
                 clearError={props.clearError}
-                getUsername={props.getUsername}
+                username={props.username}
+                handleUsername={props.handleUsername}
                 apiUrl={props.apiUrl}
             />
         </div>

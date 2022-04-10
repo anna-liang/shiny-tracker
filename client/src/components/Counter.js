@@ -21,7 +21,7 @@ export default function Counter(props) {
             count = 0;
             if (hunt !== undefined) props.setActiveCounter(count);
         }
-        if (hunt !== null && props.getUsername()) {
+        if (hunt !== null && props.username) {
             try {
                 // const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
                 await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
