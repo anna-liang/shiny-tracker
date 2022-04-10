@@ -10,17 +10,17 @@ import './styles/Main.css';
 function App() {
 
   /* Dev */
-  // const apiUrl = "http://localhost:3001/";
+  const apiUrl = "http://localhost:3001/";
   /* Prod */
-  const apiUrl = "https://shinytrackerserver.herokuapp.com/";
+  // const apiUrl = "https://shinytrackerserver.herokuapp.com/";
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [username, setUsername] = useState("");
+  const [signedIn, setSignedIn] = useState("");
 
-  let handleUsername = function(username){
-    setUsername(username);
+  let handleSignIn = function(isSignedIn){
+    setSignedIn(isSignedIn);
   };
 
   const getPokemon = async (target) => {
@@ -92,7 +92,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (username) getActiveHunt();
+    if (signedIn) getActiveHunt();
     clearError();
   });
 
@@ -106,20 +106,20 @@ function App() {
         getActiveHunt={getActiveHunt}
         renderError={renderError}
         clearError={clearError}
-        username={username}
-        handleUsername={handleUsername}
+        signedIn={signedIn}
+        handleSignIn={handleSignIn}
         apiUrl={apiUrl}
       />
-      {!username ?
+      {!signedIn ?
       <SparkleTitle
         loaded={loaded}
         setLoaded={setLoaded}
-        username={username}
+        signedIn={signedIn}
       />
       :
       null
       }
-      {username ?
+      {signedIn ?
         <CounterHunts
           getPokemon={getPokemon}
           activePokemon={activePokemon}
@@ -133,7 +133,7 @@ function App() {
           getActiveHunt={getActiveHunt}
           renderError={renderError}
           clearError={clearError}
-          username={username}
+          signedIn={signedIn}
           apiUrl={apiUrl}
         />
         :

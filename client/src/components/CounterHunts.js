@@ -21,8 +21,8 @@ export default function CounterHunts(props) {
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} centered>
-                            <Tab label="Counter" value="Counter" onClick={props.username && props.activeTargetImg !== '' ? props.getActiveHunt : () => {}}/>
-                            <Tab label="Hunts" value="Hunts" onClick={props.username ? props.getHunts : () => {}}/>
+                            <Tab label="Counter" value="Counter" onClick={props.signedIn && props.activeTargetImg !== '' ? props.getActiveHunt : () => {}}/>
+                            <Tab label="Hunts" value="Hunts" onClick={props.signedIn ? props.getHunts : () => {}}/>
                         </Tabs>
                     </Box>
                     <TabPanel value="Counter">
@@ -34,7 +34,7 @@ export default function CounterHunts(props) {
                             getActiveHunt={props.getActiveHunt}
                             renderError={props.renderError}
                             clearError={props.clearError}
-                            username={props.username}
+                            signedIn={props.signedIn}
                             apiUrl={props.apiUrl}
                         />
                     </TabPanel>

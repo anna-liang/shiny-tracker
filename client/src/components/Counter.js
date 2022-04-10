@@ -21,7 +21,7 @@ export default function Counter(props) {
             count = 0;
             if (hunt !== undefined) props.setActiveCounter(count);
         }
-        if (hunt !== null && props.username) {
+        if (hunt !== null && props.signedIn) {
             try {
                 await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
                     "target": hunt.target, 

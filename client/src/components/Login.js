@@ -12,7 +12,6 @@ import '../styles/Main.css';
 
 export default function Login(props) {
 
-    const [signedIn, setSignedIn] = useState(props.username !== "");
     const [signInOpen, setSignInOpen] = useState(false);
     const [signUpOpen, setSignUpOpen] = useState(false);
 
@@ -46,9 +45,8 @@ export default function Login(props) {
           props.getHunts();
           props.getActiveHunt();
           if (res.data.username !== "") {
-            setSignedIn(true);
             setSignInOpen(false);
-            props.handleUsername(res.data.username);
+            props.handleSignIn(true);
             props.clearError();
           }
         } catch (err) {
@@ -70,9 +68,8 @@ export default function Login(props) {
           props.getHunts();
           props.getActiveHunt();
           if (res.data.username !== "") {
-            setSignedIn(true);
             setSignUpOpen(false);
-            props.handleUsername(res.data.username);
+            props.handleSignIn(true);
             props.clearError();
           }
         } catch (err) {
@@ -86,8 +83,7 @@ export default function Login(props) {
               withCredentials: true
           });
           if (res.status === 200) {
-              setSignedIn(false);
-              props.handleUsername(res.data.username);
+              props.handleSignIn(false);
               window.location.href = '/';
           }
         } catch (err) {
@@ -97,7 +93,7 @@ export default function Login(props) {
 
     return (
         <div>
-            <div className={signedIn ? "hidden" : "sign-in-btn"}>
+            <div className={props.signedIn ? "hidden" : "sign-in-btn"}>
                 <Button 
                     variant="outlined"
                     onClick={handleSignInOpen}
@@ -138,7 +134,7 @@ export default function Login(props) {
                     </form>
                 </DialogContent>
             </Dialog>
-            <div className={signedIn ? "hidden" : "sign-up-btn"}>
+            <div className={props.signedIn ? "hidden" : "sign-up-btn"}>
                 <Button 
                     variant="outlined"
                     onClick={handleSignUpOpen}
@@ -179,7 +175,7 @@ export default function Login(props) {
                     </form>
                 </DialogContent>
             </Dialog>
-            <div className={signedIn ? "sign-out-btn" : "hidden"}>
+            <div className={props.signedIn ? "sign-out-btn" : "hidden"}>
                 <Button 
                     className="hidden"
                     variant="outlined"
