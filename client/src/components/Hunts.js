@@ -21,7 +21,6 @@ export default function Hunts(props) {
     const newHunt = async (target, index) => {
         let targetImg = await props.getPokemon(target);
         try {
-        //   const url = "http://localhost:3001/api/hunt";
           const res = await axios.post(props.apiUrl + "api/hunt", { 
             "target": target, 
             "targetImg": targetImg,

@@ -23,7 +23,6 @@ export default function Counter(props) {
         }
         if (hunt !== null && props.username) {
             try {
-                // const url = "http://localhost:3001/api/hunt/" + hunt._id + "/";
                 await axios.patch(props.apiUrl + "api/hunt/" + hunt._id + "/", { 
                     "target": hunt.target, 
                     "targetImg": hunt.targetImg,

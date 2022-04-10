@@ -37,7 +37,6 @@ export default function Login(props) {
         let username = e.target.elements[0].value.toLowerCase();
         let password = e.target.elements[1].value.toLowerCase();
         try {
-        //   const url = "http://localhost:3001/signin/";
           const res = await axios.post(props.apiUrl + "signin/", { 
             "username": username, 
             "password": password, 
@@ -62,7 +61,6 @@ export default function Login(props) {
         let username = e.target.elements[0].value.toLowerCase();
         let password = e.target.elements[1].value.toLowerCase();
         try {
-        //   const url = "http://localhost:3001/signup/";
           const res = await axios.post(props.apiUrl + "signup/", { 
             "username": username, 
             "password": password, 
@@ -84,7 +82,6 @@ export default function Login(props) {
 
     const handleSignOut = async () => {
         try {
-        //   const url = "http://localhost:3001/signout/";
           const res = await axios.get(props.apiUrl + "signout/", {
               withCredentials: true
           });

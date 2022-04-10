@@ -9,8 +9,10 @@ import './styles/Main.css';
 
 function App() {
 
-  const apiUrl = "https://shinytrackerserver.herokuapp.com/";
+  /* Dev */
   // const apiUrl = "http://localhost:3001/";
+  /* Prod */
+  const apiUrl = "https://shinytrackerserver.herokuapp.com/";
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
@@ -44,7 +46,6 @@ function App() {
 
   const getHunts = async () => {
     try {
-      // const url = "http://localhost:3001/api/hunt";
       const res = await axios.get(apiUrl + "api/hunt", {
         withCredentials: true,
       });
@@ -59,7 +60,6 @@ function App() {
 
   const getActiveHunt = async () => {
     try {
-        // const url = "http://localhost:3001/api/activeHunt";
         const res = await axios.get(apiUrl + "api/activeHunt", {
           withCredentials: true,
         });
