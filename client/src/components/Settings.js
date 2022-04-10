@@ -33,7 +33,7 @@ export default function Settings(props) {
             let newHunts = [...props.hunts];
             newHunts[index].target = target;
             newHunts[index].targetImg = targetImg;
-            props.setHunts(newHunts);
+            props.updateHunts(newHunts);
             props.clearError();
           } catch (err) {
             props.renderError(err);
@@ -72,7 +72,7 @@ export default function Settings(props) {
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].gen = gen;
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
     };
 
     const handleMethodChange = async (e) => {
@@ -97,7 +97,7 @@ export default function Settings(props) {
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].method = method;
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
     };
 
     const handlePhaseSubmit = async (e) => {
@@ -122,7 +122,7 @@ export default function Settings(props) {
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].phase = phase;
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
     };
 
     const handleCharmChange = async () => {
@@ -146,7 +146,7 @@ export default function Settings(props) {
         }
         let newHunts = [...props.hunts];
         newHunts[props.index].charm = charm;
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
     };
 
     const handleDelete = async () => {
@@ -161,7 +161,7 @@ export default function Settings(props) {
         document.getElementById("target-form").reset();
         let newHunts = [...props.hunts];
         newHunts.splice(props.index, 1);
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
         if (props.hunt.active)
             props.revertDefault();
     };
@@ -214,7 +214,7 @@ export default function Settings(props) {
             }
         });
         newHunts[props.index].active = !oldActiveState;
-        props.setHunts(newHunts);
+        props.updateHunts(newHunts);
     };
 
     return (

@@ -11,15 +11,15 @@ export default function Counter(props) {
         let count = props.activeCounter;
         if (action === "increment") {
             count = props.activeCounter + props.step;
-            if (hunt !== undefined) props.setActiveCounter(count);
+            if (hunt !== undefined) props.updateActiveCounter(count);
         }
         else if (action === "decrement") {
             count = Math.max(props.activeCounter - props.step, 0);
-            if (hunt !== undefined) props.setActiveCounter(count);
+            if (hunt !== undefined) props.updateActiveCounter(count);
         }
         else if (action === "reset") {
             count = 0;
-            if (hunt !== undefined) props.setActiveCounter(count);
+            if (hunt !== undefined) props.updateActiveCounter(count);
         }
         if (hunt !== null && props.signedIn) {
             try {

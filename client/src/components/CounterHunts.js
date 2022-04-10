@@ -11,8 +11,12 @@ export default function CounterHunts(props) {
     const [value, setValue] = useState('Counter');
     const [step, setStep] = useState(1);
 
-    const handleChange = (e, newValue) => {
+    const handleChange = (_, newValue) => {
         setValue(newValue);
+    };
+
+    const updateStep = (newStep) => {
+        setStep(newStep);
     };
 
     return (
@@ -29,7 +33,7 @@ export default function CounterHunts(props) {
                         <Counter
                             activeTargetImg={props.activeTargetImg}
                             activeCounter={props.activeCounter}
-                            setActiveCounter={props.setActiveCounter}
+                            updateActiveCounter={props.updateActiveCounter}
                             step={step}
                             getActiveHunt={props.getActiveHunt}
                             renderError={props.renderError}
@@ -43,10 +47,10 @@ export default function CounterHunts(props) {
                             getPokemon={props.getPokemon}
                             revertDefault={props.revertDefault}
                             step={step}
-                            setStep={setStep}
+                            updateStep={updateStep}
                             hunts={props.hunts}
                             getHunts={props.getHunts}
-                            setHunts={props.setHunts}
+                            updateHunts={props.updateHunts}
                             activePokemon={props.activePokemon}
                             renderError={props.renderError}
                             clearError={props.clearError}

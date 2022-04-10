@@ -10,13 +10,12 @@ import './styles/Main.css';
 function App() {
 
   /* Dev */
-  const apiUrl = "http://localhost:3001/";
+  // const apiUrl = "http://localhost:3001/";
   /* Prod */
-  // const apiUrl = "https://shinytrackerserver.herokuapp.com/";
+  const apiUrl = "https://shinytrackerserver.herokuapp.com/";
   const [activeTargetImg, setActiveTargetImg] = useState("");
   const [activeCounter, setActiveCounter] = useState(0);
   const [hunts, setHunts] = useState([]);
-  const [loaded, setLoaded] = useState(false);
   const [signedIn, setSignedIn] = useState("");
 
   let handleSignIn = function(isSignedIn){
@@ -42,6 +41,14 @@ function App() {
   const revertDefault = () => {
     setActiveTargetImg('');
     setActiveCounter(0);
+  };
+
+  const updateActiveCounter = (count) => {
+    setActiveCounter(count)
+  };
+
+  const updateHunts = (newHunts) => {
+    setHunts(newHunts);
   };
 
   const getHunts = async () => {
@@ -112,8 +119,6 @@ function App() {
       />
       {!signedIn ?
       <SparkleTitle
-        loaded={loaded}
-        setLoaded={setLoaded}
         signedIn={signedIn}
       />
       :
@@ -125,10 +130,10 @@ function App() {
           activePokemon={activePokemon}
           activeTargetImg={activeTargetImg}
           activeCounter={activeCounter}
-          setActiveCounter={setActiveCounter}
+          updateActiveCounter={updateActiveCounter}
           revertDefault={revertDefault}
           hunts={hunts}
-          setHunts={setHunts}
+          updateHunts={updateHunts}
           getHunts={getHunts}
           getActiveHunt={getActiveHunt}
           renderError={renderError}

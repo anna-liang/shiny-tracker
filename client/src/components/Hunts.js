@@ -15,7 +15,7 @@ export default function Hunts(props) {
 
     const handleStep = (e) => {
         e.preventDefault();
-        props.setStep(parseInt(e.target.elements[0].value));
+        props.updateStep(parseInt(e.target.elements[0].value));
     };
 
     const newHunt = async (target, index) => {
@@ -39,7 +39,7 @@ export default function Hunts(props) {
           else
             newHunts[index] = res.data;
           props.getHunts();
-          props.setHunts(newHunts);
+          props.updateHunts(newHunts);
           props.clearError();
         } catch (err) {
           props.renderError(err);
@@ -79,7 +79,7 @@ export default function Hunts(props) {
                                             <Settings 
                                                 getPokemon={props.getPokemon}
                                                 revertDefault={props.revertDefault}
-                                                setHunts={props.setHunts}
+                                                updateHunts={props.updateHunts}
                                                 index={index}
                                                 hunts={props.hunts}
                                                 hunt={hunt}
