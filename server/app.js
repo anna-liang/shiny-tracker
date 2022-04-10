@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://anna:ZzBDRCrpvbJtmzXW@shiny-tracker.pryly.mongodb.net/shinyTracker?retryWrites=true&w=majority";
+const uri = process.env.SHINY_TRACKER_MONGO_URI;
 
 mongoose
   .connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
