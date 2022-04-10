@@ -6,8 +6,6 @@ app.set('trust proxy', 1);
 app.use(bodyParser.json());
 const crypto = require('crypto');
 
-const cookie = require('cookie');
-
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
@@ -28,14 +26,32 @@ mongoose
 const conn = mongoose.connection;
 
 const cors = require('cors');
+/* Dev */
+// app.use(cors({
+//     origin:'http://localhost:3000',
+//     credentials: true,
+//     optionsSuccessStatus: 200,
+// }));
+/* Prod */
 app.use(cors({
-//   origin:'http://localhost:3000',
-  origin: 'https://shinytracker.herokuapp.com',
-  credentials: true,
-  optionsSuccessStatus: 200,
+    origin: 'https://shinytracker.herokuapp.com',
+    credentials: true,
+    optionsSuccessStatus: 200,
 }));
 
 const session = require('express-session');
+/* Dev */
+// app.use(session({
+//     secret: 'pokemon',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         maxAge: 99999999,
+//         httpOnly: true,
+//         secure: false,
+//     }
+// }));
+/* Prod */
 app.use(session({
     secret: 'pokemon',
     resave: false,
@@ -43,7 +59,6 @@ app.use(session({
     cookie: {
         maxAge: 99999999,
         httpOnly: true,
-        // secure: false,
         secure: true,
         sameSite: "none"
     }
@@ -164,10 +179,6 @@ app.get('/signout/', isAuthenticated, function (req, res, next) {
     req.session.destroy(function(err) {
         if (err) return res.status(500).end(err);
     });
-    // res.setHeader('Set-Cookie', cookie.serialize('username', '', {
-    //       path : '/', 
-    //       maxAge: 99999999,
-    // }));
     return res.json({"username": ""});
 });
 
