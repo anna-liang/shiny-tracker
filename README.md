@@ -4,6 +4,8 @@ A shiny hunt counter and tracker for trainers.
 
 ![shiny tracker gif](https://raw.githubusercontent.com/anna-liang/shiny-tracker/main/client/src/media/demo.gif?token=AJJH5RCJSLXEHNI6OV6X5I3BRHTJ2)
 
+[Try out the app here!](https://shinytracker.herokuapp.com/)
+
 ## Features
 - A counter for any currently active hunt
 - A hunts tab to keep track of all on-going hunts
