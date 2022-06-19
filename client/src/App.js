@@ -101,7 +101,7 @@ function App() {
   useEffect(() => {
     if (signedIn) getActiveHunt();
     clearError();
-  });
+  }, []);
 
   return (
     <div className="App">
