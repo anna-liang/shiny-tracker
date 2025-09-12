@@ -1,31 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Method, type Hunt } from '@/types'
+import { inject } from 'vue'
 
-const count = ref(0) // TODO: get from local storage
-const step = ref(1) // TODO: get from local storage
-
-const incrementHandler = () => {
-  count.value += step.value
+interface ActiveHuntContext {
+  activeHunt: Hunt
+  handleIncrement: () => void
+  handleDecrement: () => void
+  handleReset: () => void
 }
 
-const decrementHandler = () => {
-  count.value = Math.max(0, count.value - step.value)
+const defaultActiveHuntContext: ActiveHuntContext = {
+  activeHunt: {
+    id: '',
+    count: 0,
+    method: Method.RE,
+    phase: 0,
+    shinyCharm: false,
+    active: true,
+  },
+  handleIncrement: () => {},
+  handleDecrement: () => {},
+  handleReset: () => {},
 }
 
-const resetHandler = () => {
-  // TODO: add warning
-  count.value = 0
-}
+const { activeHunt, handleIncrement, handleDecrement, handleReset } =
+  inject<ActiveHuntContext>('activeHunt') || defaultActiveHuntContext
 </script>
 
 <template>
   <!-- TODO: change to editable text -->
-  <h1>{{ count }}</h1>
+  <h1>{{ activeHunt.count }}</h1>
   <div class="d-grid gap-2">
     <div class="row gap-2">
-      <button @click="decrementHandler" type="button" class="btn btn-danger col">-</button>
-      <button @click="incrementHandler" type="button" class="btn btn-success col">+</button>
+      <button @click="handleDecrement" type="button" class="btn btn-danger col">-</button>
+      <button @click="handleIncrement" type="button" class="btn btn-success col">+</button>
     </div>
-    <button @click="resetHandler" type="button" class="btn btn-outline-danger">RESET</button>
+    <button @click="handleReset" type="button" class="btn btn-outline-danger">RESET</button>
   </div>
 </template>
