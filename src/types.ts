@@ -25,5 +25,6 @@ export interface Hunt {
   phase: number
   shinyCharm: boolean
   active: boolean
+  sprite?: string
   // date: string
 }

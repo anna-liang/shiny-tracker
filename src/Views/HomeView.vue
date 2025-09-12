@@ -18,6 +18,12 @@ const activeHunt = ref<Hunt>({
 onMounted(() => {
   const storedStep = localStorage.getItem('step')
   step.value = storedStep === null ? 1 : parseInt(JSON.parse(storedStep))
+  const storedHunts = localStorage.getItem('hunts')
+  if (storedHunts !== null) {
+    const hunts = JSON.parse(storedHunts)
+    const filterActive = hunts.filter((hunt: Hunt) => hunt.active === true)
+    if (filterActive.length > 0) activeHunt.value = filterActive[0]
+  }
 })
 
 const handleTabSwitch = (newView: View) => {
@@ -51,20 +57,22 @@ const handleUpdateStep = (newStep: number) => {
 
 const handleUpdateHunt = () => {
   const storedHunts = localStorage.getItem('hunts')
-  console.log(storedHunts)
   if (storedHunts !== null) {
     const parsedStoredHunts: Hunt[] = JSON.parse(storedHunts)
     const huntIndex = parsedStoredHunts?.findIndex((hunt: Hunt) => hunt.id === activeHunt.value.id)
-    console.log('hunt index', huntIndex)
     if (huntIndex !== -1) {
       parsedStoredHunts[huntIndex] = activeHunt.value
       try {
         localStorage.setItem('hunts', JSON.stringify(parsedStoredHunts))
       } catch (error) {
-        console.error('Error setting hunts', error)
+        console.error('Error updating hunts', error)
       }
     }
   }
+}
+
+const handleUpdateActiveHunt = (hunt: Hunt) => {
+  activeHunt.value = hunt
 }
 
 provide('activeHunt', {
@@ -72,6 +80,7 @@ provide('activeHunt', {
   handleIncrement,
   handleDecrement,
   handleReset,
+  handleUpdateActiveHunt,
 })
 
 provide('step', {
@@ -81,23 +90,32 @@ provide('step', {
 </script>
 
 <template>
-  <ul class="nav nav-underline">
-    <li class="nav-item">
-      <a
-        @click.prevent="handleTabSwitch(View.Counter)"
-        :class="['nav-link', { active: view === View.Counter }]"
-        >COUNTER</a
-      >
-    </li>
-    <li class="nav-item">
-      <a
-        @click.prevent="handleTabSwitch(View.Hunts)"
-        :class="['nav-link', { active: view === View.Hunts }]"
-        >HUNTS</a
-      >
-    </li>
-  </ul>
+  <div class="col d-flex flex-column align-items-center" :style="{ marginTop: '20px' }">
+    <i class="bi bi-stars" :style="{ color: '#e8ba17', fontSize: '50px' }"></i>
+    <div class="container" :style="{ marginTop: '20px' }">
+      <div class="col d-flex flex-column align-items-center">
+        <ul class="nav nav-underline">
+          <li class="nav-item">
+            <a
+              @click.prevent="handleTabSwitch(View.Counter)"
+              :class="['nav-link', { active: view === View.Counter }]"
+              :style="{ color: view === View.Counter ? '#e8ba17' : '#535152' }"
+              >COUNTER</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              @click.prevent="handleTabSwitch(View.Hunts)"
+              :class="['nav-link', { active: view === View.Hunts }]"
+              :style="{ color: view === View.Hunts ? '#e8ba17' : '#535152' }"
+              >HUNTS</a
+            >
+          </li>
+        </ul>
 
-  <Counter v-if="view === View.Counter" />
-  <Hunts v-if="view === View.Hunts" />
+        <Counter v-if="view === View.Counter" />
+        <Hunts v-if="view === View.Hunts" />
+      </div>
+    </div>
+  </div>
 </template>
