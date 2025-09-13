@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Method, type Hunt } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, nextTick } from 'vue'
 import axios from 'axios'
 
 interface StepContext {
@@ -31,7 +31,6 @@ const stepRef = ref(step)
 
 onMounted(async () => {
   const storedHunts = localStorage.getItem('hunts')
-  console.log('mounted', JSON.parse(storedHunts))
   hunts.value = storedHunts === null ? [] : JSON.parse(storedHunts)
 
   // fetch names of all pokemon for dropdown search ease
@@ -43,14 +42,13 @@ onMounted(async () => {
     })
     allPokemonNames.value = allPokemon
   } catch (error) {
-    console.log('Error fetching Pokemon', error)
+    console.error('Error fetching Pokemon', error)
   }
 })
 
 const setHuntsInLocalStorage = () => {
-  console.log('set local store', hunts.value)
   try {
-    localStorage.setItem('hunts', JSON.stringify(hunts.value))
+    nextTick(() => localStorage.setItem('hunts', JSON.stringify(hunts.value)))
   } catch (error) {
     console.error('Error setting hunts', error)
   }
@@ -70,32 +68,32 @@ const handleNewHunt = () => {
   setHuntsInLocalStorage()
 }
 
-const handleUpdatePokemon = async (id: string) => {
+const handleUpdatePokemon = (id: string) => {
   // find modified hunt
-  const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
-  console.log(huntIndex)
-  if (huntIndex !== -1) {
-    const hunt = hunts.value[huntIndex]
-    console.log(hunt?.pokemon?.replace(/[' ']/g, '-'))
-    try {
-      // replace whitespace with -
-      const pokemonResult = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/${hunt?.pokemon?.replace(/[' ']/g, '-')}`,
-      )
-      hunt.pokemonId = pokemonResult.data.id
-      hunt.sprite = pokemonResult.data.sprites.other.showdown.front_shiny
-      handleUpdateHunt(id)
-    } catch (error) {
-      console.error('Error fetching Pokemon', error)
+  nextTick(async () => {
+    const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
+    if (huntIndex !== -1) {
+      const hunt = hunts.value[huntIndex]
+      try {
+        // replace whitespace with -
+        const pokemonResult = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${hunt?.pokemon?.replace(/[' ']/g, '-')}`,
+        )
+        hunt.pokemonId = pokemonResult.data.id
+        hunt.sprite = pokemonResult.data.sprites.other.showdown.front_shiny
+        handleUpdateHunt(id)
+        // if updated pokemon is active
+        if (hunt.active) handleSetActiveHunt(id)
+      } catch (error) {
+        console.error('Error fetching Pokemon', error)
+      }
     }
-  }
+  })
 }
 
 const handleUpdateHunt = (id: string) => {
-  console.log('update hunt')
   // find modified hunt
   const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
-  console.log(huntIndex, hunts.value)
   // update hunt in store
   if (huntIndex !== -1) {
     setHuntsInLocalStorage()
@@ -106,6 +104,16 @@ const handleDeleteHunt = (id: string) => {
   // find hunt to delete
   const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
   if (huntIndex !== 1) {
+    // if deleting active pokemon, set to default
+    if (hunts.value[huntIndex].active)
+      handleUpdateActiveHunt({
+        id: '',
+        count: 0,
+        method: Method.RE,
+        phase: 0,
+        shinyCharm: false,
+        active: false,
+      })
     hunts.value.splice(huntIndex, 1)
     setHuntsInLocalStorage()
   }
@@ -114,7 +122,7 @@ const handleDeleteHunt = (id: string) => {
 const handleSetActiveHunt = (id: string) => {
   hunts.value.forEach((hunt: Hunt) => {
     if (hunt.id === id) {
-      hunt.active = !hunt.active
+      hunt.active = true
       handleUpdateActiveHunt(hunt)
     } else {
       hunt.active = false
@@ -139,7 +147,7 @@ const handleSetActiveHunt = (id: string) => {
     ></v-text-field>
   </v-form>
   <div
-    class="my-15 border-1 rounded-lg py-8 px-2"
+    :class="['my-15', hunts.length > 0 ? 'border-1' : 'border-0', 'rounded-lg', 'py-8', 'px-2']"
     :style="{
       width: '80vw',
       borderColor: '#ced2d1',
@@ -173,7 +181,7 @@ const handleSetActiveHunt = (id: string) => {
         <div>
           <v-select
             label="Method"
-            @change:model-value="handleUpdateHunt(hunt.id)"
+            @update:model-value="handleUpdateHunt(hunt.id)"
             v-model="hunt.method"
             name="method"
             :items="Object.values(Method)"
