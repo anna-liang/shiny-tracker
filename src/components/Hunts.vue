@@ -27,7 +27,7 @@ const allPokemonNames = ref<string[]>([])
 const { handleUpdateActiveHunt } =
   inject<ActiveHuntContext>('activeHunt') || defaultActiveHuntContext
 const { step, handleUpdateStep } = inject<StepContext>('step') || defaultStepContext
-const stepRef = ref(step)
+const stepRef = ref<string | number>(step)
 
 onMounted(async () => {
   const storedHunts = localStorage.getItem('hunts')
@@ -136,16 +136,16 @@ const handleSetActiveHunt = (id: string) => {
   <v-btn @click="handleNewHunt" variant="outlined" color="primary" class="mt-8 w-[200px] mb-2">
     NEW HUNT
   </v-btn>
-  <v-form @submit.prevent="handleUpdateStep(parseInt(stepRef))" :style="{ width: '200px' }">
-    <v-text-field
-      label="Step"
-      v-model="stepRef"
-      id="stepRef"
-      name="stepRef"
-      required
-      bg-color="white"
-    ></v-text-field>
-  </v-form>
+  <v-text-field
+    label="Step"
+    v-model="step"
+    @update:model-value="handleUpdateStep(parseInt(stepRef.toString()))"
+    id="stepRef"
+    name="stepRef"
+    required
+    bg-color="white"
+    :style="{ width: '200px' }"
+  ></v-text-field>
   <div
     :class="['my-15', hunts.length > 0 ? 'border-1' : 'border-0', 'rounded-lg', 'py-8', 'px-2']"
     :style="{
