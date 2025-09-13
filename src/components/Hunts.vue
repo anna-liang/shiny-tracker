@@ -146,14 +146,14 @@ const handleSetActiveHunt = (id: string) => {
     }"
   >
     <v-form v-for="(hunt, index) in hunts" :key="hunt.id">
-      <div class="grid md:grid-cols-5 sm:grid-cols-1 gap-4 align-center">
+      <div class="grid grid-cols-1 md:grid-cols-5 md:gap-4 align-center">
         <div class="grid justify-items-center">
-          <img :src="hunt.sprite" class="max-w-40 max-h-40" />
+          <img :src="hunt.sprite" class="max-w-35 max-h-35 lg:max-w-40 lg:max-h-40" />
         </div>
         <div class="grid justify-items-center">
-          <h1 class="text-[24px]">{{ hunt.count }}</h1>
+          <h1 class="text-[24px] md:my-0 my-8">{{ hunt.count }}</h1>
         </div>
-        <div class="">
+        <div>
           <v-autocomplete
             label="Pokemon"
             @update:model-value="handleUpdatePokemon(hunt.id)"
@@ -170,7 +170,7 @@ const handleSetActiveHunt = (id: string) => {
           >
           </v-select>
         </div>
-        <div class="">
+        <div>
           <v-select
             label="Method"
             @change:model-value="handleUpdateHunt(hunt.id)"
@@ -201,8 +201,7 @@ const handleSetActiveHunt = (id: string) => {
           <v-btn
             :variant="hunt.active ? 'flat' : 'outlined'"
             color="green"
-            width="120"
-            class="mt-1 mb-4"
+            class="mt-1 ml-1 mb-4 w-[120px] md:w-[100px] lg:w-[120px]"
             @click="handleSetActiveHunt(hunt.id)"
             >ACTIVE</v-btn
           >
@@ -211,7 +210,7 @@ const handleSetActiveHunt = (id: string) => {
             prepend-icon="mdi-trash-can-outline"
             variant="outlined"
             color="red"
-            width="120"
+            class="ml-1 w-[120px] md:w-[100px] lg:w-[120px]"
             @click="handleDeleteHunt(hunt.id)"
             >DELETE</v-btn
           >
