@@ -72,8 +72,10 @@ const handleUpdatePokemon = async (id: string) => {
 }
 
 const handleUpdateHunt = (id: string) => {
+  console.log('update hunt')
   // find modified hunt
   const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
+  console.log(huntIndex, hunts.value)
   // update hunt in store
   if (huntIndex !== -1) {
     setHuntsInLocalStorage()
@@ -104,128 +106,93 @@ const handleSetActiveHunt = (id: string) => {
 
 <template>
   <!-- TODO: change to editable text -->
-  <button
-    @click="handleNewHunt"
-    type="button"
-    class="btn btn-outline-primary"
-    :style="{ marginTop: '40px', width: '200px', marginBottom: '10px' }"
-  >
+  <v-btn @click="handleNewHunt" variant="outlined" color="primary" class="mt-8 w-[200px] mb-2">
     NEW HUNT
-  </button>
-  <form @submit.prevent="handleUpdateStep(parseInt(stepRef))" :style="{ width: '200px' }">
-    <label for="type">Step</label>
-    <input
-      type="text"
-      class="form-control"
+  </v-btn>
+  <v-form @submit.prevent="handleUpdateStep(parseInt(stepRef))" :style="{ width: '200px' }">
+    <v-text-field
+      label="Step"
       v-model="stepRef"
       id="stepRef"
       name="stepRef"
       required
-    />
-  </form>
+      bg-color="white"
+    ></v-text-field>
+  </v-form>
   <div
-    class="container"
+    class="my-15 border-1 rounded-lg py-8 px-2"
     :style="{
-      marginTop: '50px',
-      marginBottom: '100px',
       width: '80vw',
-      borderWidth: '1px',
       borderColor: '#ced2d1',
-      borderRadius: '8px',
-      borderStyle: 'solid',
-      paddingTop: '30px',
-      paddingBottom: '30px',
-      paddingRight: '20px',
     }"
   >
-    <form v-for="(hunt, index) in hunts" :key="hunt.id">
-      <div class="row d-flex align-items-center">
-        <div class="col d-flex justify-content-center">
-          <img :src="hunt.sprite" :style="{ maxWidth: '100px', maxHeight: '100px' }" />
+    <v-form v-for="(hunt, index) in hunts" :key="hunt.id">
+      <div class="grid grid-cols-5 gap-4 align-center">
+        <div class="grid justify-items-center">
+          <img :src="hunt.sprite" class="max-w-40 max-h-40" />
         </div>
-        <div class="col d-flex justify-content-center">
-          <h1>{{ hunt.count }}</h1>
+        <div class="grid justify-items-center border-amber-500 border-2">
+          <h1 class="text-[24px]">{{ hunt.count }}</h1>
         </div>
-        <div class="col">
-          <label for="type">Pokemon</label>
-          <input
-            type="text"
+        <div class="">
+          <v-text-field
+            label="Pokemon"
             @change="handleUpdatePokemon(hunt.id)"
-            class="form-control"
             v-model="hunt.pokemon"
             name="pokemon"
-            :style="{ marginBottom: '10px' }"
-          />
-          <label for="type">Generation</label>
-          <select
-            class="form-select"
-            @change="handleUpdateHunt(hunt.id)"
+          ></v-text-field>
+          <v-select
+            label="Generation"
+            @update:modelValue="handleUpdateHunt(hunt.id)"
             v-model="hunt.generation"
             name="generation"
+            :items="Array.from({ length: 9 }, (_, i) => i + 1)"
           >
             <option selected>--</option>
             <option v-for="gen in 9" :key="gen">{{ gen }}</option>
-          </select>
+          </v-select>
         </div>
-        <div class="col">
-          <label for="type">Method</label>
-          <select
-            class="form-select"
-            @change="handleUpdateHunt(hunt.id)"
+        <div class="">
+          <v-select
+            label="Method"
+            @change:modelValue="handleUpdateHunt(hunt.id)"
             v-model="hunt.method"
             name="method"
-            :style="{ marginBottom: '10px' }"
+            :items="Object.values(Method)"
           >
-            <option selected>--</option>
-            <option v-for="method in Method" :key="method">{{ method }}</option>
-          </select>
-          <label for="type">Phase</label>
-          <input
-            type="text"
+          </v-select>
+          <v-text-field
+            label="Phase"
             @change="handleUpdateHunt(hunt.id)"
-            class="form-control"
             v-model="hunt.phase"
             name="phase"
             required
-          />
+          ></v-text-field>
         </div>
-        <div class="col">
-          <div class="form-check" :style="{ marginLeft: '5px' }">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              @change="handleUpdateHunt(hunt.id)"
-              v-model="hunt.shinyCharm"
-              name="shinyCharm"
-            />
-            <label class="form-check-label" for="checkDefault">Shiny Charm</label>
-          </div>
-          <div class="row d-flex justify-content-evenly align-items-center">
-            <button
-              type="button"
-              @click="handleSetActiveHunt(hunt.id)"
-              :class="['btn', hunt.active ? 'btn-success' : 'btn-outline-success']"
-              :style="{
-                marginTop: '15px',
-                marginBottom: '15px',
-                width: '40%',
-              }"
-            >
-              Active
-            </button>
-            <!-- TODO: add warning -->
-            <button
-              :style="{ width: '40%', height: '40px' }"
-              type="button"
-              class="btn btn-outline-danger"
-              @click="handleDeleteHunt(hunt.id)"
-            >
-              <i class="bi bi-trash"></i>Delete
-            </button>
-          </div>
+        <div class="grid justify-items-center">
+          <v-checkbox
+            label="Shiny Charm"
+            @change="handleUpdateHunt(hunt.id)"
+            v-model="hunt.shinyCharm"
+            name="shinyCharm"
+          ></v-checkbox>
+          <v-btn
+            :variant="hunt.active ? 'flat' : 'outlined'"
+            color="green"
+            @click="handleSetActiveHunt(hunt.id)"
+            >ACTIVE</v-btn
+          >
+          <!-- TODO: add warning -->
+          <v-btn
+            prepend-icon="mdi-trash-can-outline"
+            variant="outlined"
+            color="red"
+            @click="handleDeleteHunt(hunt.id)"
+            >DELETE</v-btn
+          >
         </div>
       </div>
-      <hr v-if="index !== hunts.length - 1" :style="{ marginTop: '35px', marginBottom: '35px' }" />
-    </form>
+      <hr v-if="index !== hunts.length - 1" class="my-6" :style="{ color: '#ced2d1' }" />
+    </v-form>
   </div>
 </template>

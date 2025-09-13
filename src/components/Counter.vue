@@ -29,41 +29,23 @@ const { activeHunt, handleIncrement, handleDecrement, handleReset } =
 
 <template>
   <!-- TODO: change to editable text -->
-  <img :src="activeHunt.sprite" :style="{ marginTop: '40px' }" />
-  <h1 :style="{ marginTop: '20px', marginBottom: '20px' }">{{ activeHunt.count }}</h1>
-  <div class="d-grid gap-2" :style="{ width: '520px' }">
-    <div class="row gap-2" :style="{ marginLeft: '1px', marginRight: '1px' }">
-      <button
+  <img :src="activeHunt.sprite" class="max-w-40 mt-4" />
+  <h1 class="my-4 text-[40px]">{{ activeHunt.count }}</h1>
+  <div class="grid grid-cols-1 justify-items-center w-110 border-2 border-amber-600">
+    <div class="grid grid-cols-2 gap-2 justify-items-center mb-2">
+      <v-btn
+        variant="flat"
         @click="handleDecrement"
-        type="button"
-        class="btn btn-danger col"
-        :style="{
-          fontSize: '28px',
-          maxHeight: '40px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingBottom: '10px',
-        }"
+        color="red"
+        width="auto"
+        :style="{ fontSize: '28px' }"
       >
         -
-      </button>
-      <button
-        @click="handleIncrement"
-        type="button"
-        class="btn btn-success col"
-        :style="{
-          fontSize: '28px',
-          maxHeight: '40px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingBottom: '10px',
-        }"
-      >
+      </v-btn>
+      <v-btn variant="flat" @click="handleIncrement" color="green" :style="{ fontSize: '28px' }">
         +
-      </button>
+      </v-btn>
     </div>
-    <button @click="handleReset" type="button" class="btn btn-outline-danger">RESET</button>
+    <v-btn variant="outlined" color="red" @click="handleReset">RESET</v-btn>
   </div>
 </template>

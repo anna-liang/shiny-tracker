@@ -90,32 +90,28 @@ provide('step', {
 </script>
 
 <template>
-  <div class="col d-flex flex-column align-items-center" :style="{ marginTop: '20px' }">
-    <i class="bi bi-stars" :style="{ color: '#e8ba17', fontSize: '50px' }"></i>
-    <div class="container" :style="{ marginTop: '20px' }">
-      <div class="col d-flex flex-column align-items-center">
-        <ul class="nav nav-underline">
-          <li class="nav-item">
-            <a
-              @click.prevent="handleTabSwitch(View.Counter)"
-              :class="['nav-link', { active: view === View.Counter }]"
-              :style="{ color: view === View.Counter ? '#e8ba17' : '#535152' }"
-              >COUNTER</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              @click.prevent="handleTabSwitch(View.Hunts)"
-              :class="['nav-link', { active: view === View.Hunts }]"
-              :style="{ color: view === View.Hunts ? '#e8ba17' : '#535152' }"
-              >HUNTS</a
-            >
-          </li>
-        </ul>
+  <div class="grid justify-items-center">
+    <v-icon icon="mdi-creation" color="#e8ba17" size="56" class="mt-4"></v-icon>
+    <div class="mt-4 grid justify-items-center">
+      <v-tabs color="#e8ba17">
+        <v-tab
+          active-color="#e8ba17"
+          base-color="#535152"
+          @click.prevent="handleTabSwitch(View.Counter)"
+        >
+          <p>COUNTER</p>
+        </v-tab>
+        <v-tab
+          active-color="#e8ba17"
+          base-color="#535152"
+          @click.prevent="handleTabSwitch(View.Hunts)"
+        >
+          <p>HUNTS</p>
+        </v-tab>
+      </v-tabs>
 
-        <Counter v-if="view === View.Counter" />
-        <Hunts v-if="view === View.Hunts" />
-      </div>
+      <Counter v-if="view === View.Counter" />
+      <Hunts v-if="view === View.Hunts" />
     </div>
   </div>
 </template>
