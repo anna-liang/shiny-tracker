@@ -12,7 +12,7 @@ const activeHunt = ref<Hunt>({
   method: Method.RE,
   phase: 0,
   shinyCharm: false,
-  active: true,
+  active: false,
 })
 
 onMounted(() => {
