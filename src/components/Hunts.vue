@@ -23,17 +23,32 @@ const defaultActiveHuntContext: ActiveHuntContext = {
 }
 
 const hunts = ref<Hunt[]>([])
+const allPokemonNames = ref<string[]>([])
 const { handleUpdateActiveHunt } =
   inject<ActiveHuntContext>('activeHunt') || defaultActiveHuntContext
 const { step, handleUpdateStep } = inject<StepContext>('step') || defaultStepContext
 const stepRef = ref(step)
 
-onMounted(() => {
+onMounted(async () => {
   const storedHunts = localStorage.getItem('hunts')
+  console.log('mounted', JSON.parse(storedHunts))
   hunts.value = storedHunts === null ? [] : JSON.parse(storedHunts)
+
+  // fetch names of all pokemon for dropdown search ease
+  try {
+    const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=2000')
+    // replace - with whitespace for better readability
+    const allPokemon = data.results.map((pokemon: { name: string; url: string }) => {
+      return pokemon.name.replace(/[- ]/g, ' ')
+    })
+    allPokemonNames.value = allPokemon
+  } catch (error) {
+    console.log('Error fetching Pokemon', error)
+  }
 })
 
 const setHuntsInLocalStorage = () => {
+  console.log('set local store', hunts.value)
   try {
     localStorage.setItem('hunts', JSON.stringify(hunts.value))
   } catch (error) {
@@ -58,10 +73,15 @@ const handleNewHunt = () => {
 const handleUpdatePokemon = async (id: string) => {
   // find modified hunt
   const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
+  console.log(huntIndex)
   if (huntIndex !== -1) {
     const hunt = hunts.value[huntIndex]
+    console.log(hunt?.pokemon?.replace(/[' ']/g, '-'))
     try {
-      const pokemonResult = await axios.get(`https://pokeapi.co/api/v2/pokemon/${hunt?.pokemon}`)
+      // replace whitespace with -
+      const pokemonResult = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${hunt?.pokemon?.replace(/[' ']/g, '-')}`,
+      )
       hunt.pokemonId = pokemonResult.data.id
       hunt.sprite = pokemonResult.data.sprites.other.showdown.front_shiny
       handleUpdateHunt(id)
@@ -105,7 +125,6 @@ const handleSetActiveHunt = (id: string) => {
 </script>
 
 <template>
-  <!-- TODO: change to editable text -->
   <v-btn @click="handleNewHunt" variant="outlined" color="primary" class="mt-8 w-[200px] mb-2">
     NEW HUNT
   </v-btn>
@@ -127,35 +146,34 @@ const handleSetActiveHunt = (id: string) => {
     }"
   >
     <v-form v-for="(hunt, index) in hunts" :key="hunt.id">
-      <div class="grid grid-cols-5 gap-4 align-center">
+      <div class="grid md:grid-cols-5 sm:grid-cols-1 gap-4 align-center">
         <div class="grid justify-items-center">
           <img :src="hunt.sprite" class="max-w-40 max-h-40" />
         </div>
-        <div class="grid justify-items-center border-amber-500 border-2">
+        <div class="grid justify-items-center">
           <h1 class="text-[24px]">{{ hunt.count }}</h1>
         </div>
         <div class="">
-          <v-text-field
+          <v-autocomplete
             label="Pokemon"
-            @change="handleUpdatePokemon(hunt.id)"
+            @update:model-value="handleUpdatePokemon(hunt.id)"
             v-model="hunt.pokemon"
             name="pokemon"
-          ></v-text-field>
+            :items="allPokemonNames"
+          ></v-autocomplete>
           <v-select
             label="Generation"
-            @update:modelValue="handleUpdateHunt(hunt.id)"
+            @update:model-value="handleUpdateHunt(hunt.id)"
             v-model="hunt.generation"
             name="generation"
             :items="Array.from({ length: 9 }, (_, i) => i + 1)"
           >
-            <option selected>--</option>
-            <option v-for="gen in 9" :key="gen">{{ gen }}</option>
           </v-select>
         </div>
         <div class="">
           <v-select
             label="Method"
-            @change:modelValue="handleUpdateHunt(hunt.id)"
+            @change:model-value="handleUpdateHunt(hunt.id)"
             v-model="hunt.method"
             name="method"
             :items="Object.values(Method)"
@@ -169,16 +187,22 @@ const handleSetActiveHunt = (id: string) => {
             required
           ></v-text-field>
         </div>
-        <div class="grid justify-items-center">
-          <v-checkbox
-            label="Shiny Charm"
-            @change="handleUpdateHunt(hunt.id)"
-            v-model="hunt.shinyCharm"
-            name="shinyCharm"
-          ></v-checkbox>
+        <div class="grid justify-items-center align-items-center mb-8">
+          <v-layout>
+            <v-checkbox
+              label="Shiny Charm"
+              @change="handleUpdateHunt(hunt.id)"
+              v-model="hunt.shinyCharm"
+              name="shinyCharm"
+              density="compact"
+              hide-details
+            ></v-checkbox>
+          </v-layout>
           <v-btn
             :variant="hunt.active ? 'flat' : 'outlined'"
             color="green"
+            width="120"
+            class="mt-1 mb-4"
             @click="handleSetActiveHunt(hunt.id)"
             >ACTIVE</v-btn
           >
@@ -187,6 +211,7 @@ const handleSetActiveHunt = (id: string) => {
             prepend-icon="mdi-trash-can-outline"
             variant="outlined"
             color="red"
+            width="120"
             @click="handleDeleteHunt(hunt.id)"
             >DELETE</v-btn
           >
