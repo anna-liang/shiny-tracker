@@ -6,7 +6,7 @@ import axios from 'axios'
 
 interface StepContext {
   step: number
-  handleUpdateStep: (step: number) => void
+  handleUpdateStep: (step: number | string) => void
 }
 
 const defaultStepContext: StepContext = {
@@ -27,7 +27,7 @@ const allPokemonNames = ref<string[]>([])
 const { handleUpdateActiveHunt } =
   inject<ActiveHuntContext>('activeHunt') || defaultActiveHuntContext
 const { step, handleUpdateStep } = inject<StepContext>('step') || defaultStepContext
-const stepRef = ref<string | number>(step)
+const stepRef = ref<number | string>(step)
 
 onMounted(async () => {
   const storedHunts = localStorage.getItem('hunts')
@@ -139,7 +139,7 @@ const handleSetActiveHunt = (id: string) => {
   <v-text-field
     label="Step"
     v-model="step"
-    @update:model-value="handleUpdateStep(parseInt(stepRef.toString()))"
+    @update:model-value="handleUpdateStep(stepRef)"
     id="stepRef"
     name="stepRef"
     required

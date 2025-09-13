@@ -46,8 +46,8 @@ const handleReset = () => {
   handleUpdateHunt()
 }
 
-const handleUpdateStep = (newStep: number) => {
-  step.value = newStep
+const handleUpdateStep = (newStep: number | string) => {
+  step.value = newStep === '' ? 0 : parseInt(newStep.toString())
   try {
     localStorage.setItem('step', JSON.stringify(step.value))
   } catch (error) {
