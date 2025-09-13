@@ -31,15 +31,14 @@ const { activeHunt, handleIncrement, handleDecrement, handleReset } =
   <img :src="activeHunt.sprite" class="max-w-40 mt-8" />
   <!-- TODO: change to editable text -->
   <h1 class="my-4 text-[40px]">{{ activeHunt.count }}</h1>
-  <div class="grid grid-cols-1 justify-items-center w-110">
-    <div class="grid grid-cols-2 gap-2 justify-items-center mb-2">
+  <div class="grid grid-cols-1 justify-items-center md:w-full w-4/5">
+    <div class="grid grid-cols-2 gap-2 justify-items-center mb-2 w-full">
       <v-btn
         variant="flat"
         @click="handleDecrement"
         color="red"
-        width="250"
         height="40"
-        class="pb-1"
+        class="pb-1 w-full"
         :style="{ fontSize: '28px' }"
       >
         -
@@ -48,7 +47,7 @@ const { activeHunt, handleIncrement, handleDecrement, handleReset } =
         variant="flat"
         @click="handleIncrement"
         color="green"
-        width="250"
+        class="w-full"
         height="40"
         :style="{ fontSize: '28px' }"
       >
