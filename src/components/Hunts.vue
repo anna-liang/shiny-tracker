@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Method, type Hunt } from '@/types'
+import { GameVersions, Method, type Hunt } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 import { ref, onMounted, inject, nextTick } from 'vue'
 import axios from 'axios'
@@ -170,11 +170,11 @@ const handleSetActiveHunt = (id: string) => {
             :items="allPokemonNames"
           ></v-autocomplete>
           <v-select
-            label="Generation"
+            label="Game Version"
             @update:model-value="handleUpdateHunt(hunt.id)"
-            v-model="hunt.generation"
-            name="generation"
-            :items="Array.from({ length: 9 }, (_, i) => i + 1)"
+            v-model="hunt.game"
+            name="game"
+            :items="Object.values(GameVersions).reverse()"
           >
           </v-select>
         </div>

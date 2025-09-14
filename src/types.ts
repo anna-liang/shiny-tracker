@@ -15,12 +15,33 @@ export enum Method {
   SOS = 'SOS Chaining',
 }
 
+export enum GameVersions {
+  RGBY = 'Red, Blue, and Yellow',
+  GSC = 'Gold, Silver, and Crystal',
+  RSE = 'Ruby, Sapphire, and Emerald',
+  FRLG = 'FireRed and LeafGreen',
+  DPPt = 'Diamond, Pearl, and Platinum',
+  HGSS = 'HeartGold and SoulSilver',
+  BW = 'Black and White',
+  BW2 = 'Black 2 and White 2',
+  XY = 'X and Y',
+  ORAS = 'Omega Ruby and Alpha Sapphire',
+  SM = 'Sun and Moon',
+  USUM = 'Ultra Sun and Ultra Moon',
+  PikaEevee = `Let's Go, Pikachu! and Let's Go, Eevee!`,
+  SwSh = 'Sword and Shield',
+  BDSP = 'Brilliant Diamond and Shining Pearl',
+  LA = 'Legends: Arceus',
+  SV = 'Scarlet and Violet',
+  LZA = 'Legends: Z-A',
+}
+
 export interface Hunt {
   id: string
   pokemonId?: number
   pokemon?: string
   count: number
-  generation?: number
+  game?: GameVersions
   method: Method
   phase: number
   shinyCharm: boolean
