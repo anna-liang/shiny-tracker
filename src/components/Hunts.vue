@@ -103,9 +103,9 @@ const handleUpdateHunt = (id: string) => {
 const handleDeleteHunt = (id: string) => {
   // find hunt to delete
   const huntIndex = hunts.value.findIndex((hunt: Hunt) => hunt.id === id)
-  if (huntIndex !== 1) {
+  if (huntIndex !== -1) {
     // if deleting active pokemon, set to default
-    if (hunts.value[huntIndex].active)
+    if (hunts.value[huntIndex].active) {
       handleUpdateActiveHunt({
         id: '',
         count: 0,
@@ -114,6 +114,7 @@ const handleDeleteHunt = (id: string) => {
         shinyCharm: false,
         active: false,
       })
+    }
     hunts.value.splice(huntIndex, 1)
     setHuntsInLocalStorage()
   }
