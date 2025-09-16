@@ -133,7 +133,7 @@ const handleSetActiveHunt = (id: string) => {
 </script>
 
 <template>
-  <v-btn @click="handleNewHunt" variant="outlined" color="primary" class="mt-8 w-[200px] mb-2">
+  <v-btn @click="handleNewHunt" variant="outlined" color="#e8ba17" class="mt-8 w-[200px] mb-2">
     NEW HUNT
   </v-btn>
   <v-text-field
@@ -143,7 +143,7 @@ const handleSetActiveHunt = (id: string) => {
     id="stepRef"
     name="stepRef"
     required
-    bg-color="white"
+    variant="underlined"
     :style="{ width: '200px' }"
   ></v-text-field>
   <div
@@ -168,6 +168,7 @@ const handleSetActiveHunt = (id: string) => {
             v-model="hunt.pokemon"
             name="pokemon"
             :items="allPokemonNames"
+            variant="underlined"
           ></v-autocomplete>
           <v-select
             label="Game Version"
@@ -175,6 +176,7 @@ const handleSetActiveHunt = (id: string) => {
             v-model="hunt.game"
             name="game"
             :items="Object.values(GameVersions).reverse()"
+            variant="underlined"
           >
           </v-select>
         </div>
@@ -185,6 +187,7 @@ const handleSetActiveHunt = (id: string) => {
             v-model="hunt.method"
             name="method"
             :items="Object.values(Method)"
+            variant="underlined"
           >
           </v-select>
           <v-text-field
@@ -193,6 +196,7 @@ const handleSetActiveHunt = (id: string) => {
             v-model="hunt.phase"
             name="phase"
             required
+            variant="underlined"
           ></v-text-field>
         </div>
         <div class="grid justify-items-center align-items-center mb-8">

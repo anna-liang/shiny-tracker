@@ -3,6 +3,7 @@ import Counter from '@/components/Counter.vue'
 import Hunts from '@/components/Hunts.vue'
 import { type Hunt, Method, View } from '@/types'
 import { provide, ref, onMounted } from 'vue'
+import ThemeSwitch from '@/components/ThemeSwitch.vue'
 
 const view = ref<View>(View.Counter)
 const step = ref(1)
@@ -90,20 +91,21 @@ provide('step', {
 </script>
 
 <template>
+  <ThemeSwitch />
   <div class="grid justify-items-center">
     <v-icon icon="mdi-creation" color="#e8ba17" size="56" class="mt-4"></v-icon>
     <div class="mt-4 grid justify-items-center">
       <v-tabs color="#e8ba17">
         <v-tab
           active-color="#e8ba17"
-          base-color="#535152"
+          base-color="#8b8b8f"
           @click.prevent="handleTabSwitch(View.Counter)"
         >
           <p>COUNTER</p>
         </v-tab>
         <v-tab
           active-color="#e8ba17"
-          base-color="#535152"
+          base-color="#8b8b8f"
           @click.prevent="handleTabSwitch(View.Hunts)"
         >
           <p>HUNTS</p>
