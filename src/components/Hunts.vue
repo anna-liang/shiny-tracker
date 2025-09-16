@@ -83,7 +83,7 @@ const handleUpdatePokemon = (id: string) => {
         hunt.sprite = pokemonResult.data.sprites.other.showdown.front_shiny
         handleUpdateHunt(id)
         // if updated pokemon is active
-        if (hunt.active) handleSetActiveHunt(id)
+        if (hunt.active) handleSetActiveHunt(id, true)
       } catch (error) {
         console.error('Error fetching Pokemon', error)
       }
@@ -120,11 +120,21 @@ const handleDeleteHunt = (id: string) => {
   }
 }
 
-const handleSetActiveHunt = (id: string) => {
+const handleSetActiveHunt = (id: string, isActive?: boolean) => {
   hunts.value.forEach((hunt: Hunt) => {
     if (hunt.id === id) {
-      hunt.active = true
-      handleUpdateActiveHunt(hunt)
+      hunt.active = isActive || !hunt.active
+      if (hunt.active) handleUpdateActiveHunt(hunt)
+      else {
+        handleUpdateActiveHunt({
+          id: '',
+          count: 0,
+          method: Method.RE,
+          phase: 0,
+          shinyCharm: false,
+          active: false,
+        })
+      }
     } else {
       hunt.active = false
     }
